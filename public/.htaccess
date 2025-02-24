@@ -1,0 +1,11 @@
+Options -Indexes
+
+RewriteEngine On
+RewriteBase /srx/public/
+
+# Si ce n'est pas un fichier
+RewriteCond %{REQUEST_FILENAME} !-f
+# Si ce n'est pas un répertoire
+RewriteCond %{REQUEST_FILENAME} !-d
+# Réécrire vers index.php
+RewriteRule ^(.*)$ index.php [L,QSA]
