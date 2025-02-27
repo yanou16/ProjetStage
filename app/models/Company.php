@@ -98,8 +98,7 @@ class Company extends Model {
 
     public function search($query) {
         $sql = "SELECT * FROM companies 
-                WHERE name LIKE ? OR industry LIKE ? OR description LIKE ?
-                ORDER BY name";
+                WHERE name LIKE ? OR industry LIKE ? OR description LIKE ?";
         
         $searchTerm = "%{$query}%";
         $stmt = $this->db->prepare($sql);
@@ -150,6 +149,54 @@ class Company extends Model {
                 ORDER BY i.created_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$companyId]);
+        return $stmt->fetchAll();
+    }
+
+    public function count() {
+        $sql = "SELECT COUNT(*) as total FROM companies";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result['total'];
+    }
+
+    public function countInternships() {
+        $sql = "SELECT COUNT(*) as total FROM internships";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result['total'];
+    }
+
+    public function getSectorStats() {
+        $sql = "SELECT 
+                industry,
+                COUNT(*) as count,
+                (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM companies)) as percentage
+                FROM companies 
+                WHERE industry IS NOT NULL 
+                GROUP BY industry 
+                ORDER BY count DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function getTopCompaniesByInternships() {
+        $sql = "SELECT 
+                c.id,
+                c.name,
+                c.industry,
+                COUNT(i.id) as internship_count,
+                MAX(i.created_at) as last_internship_date
+                FROM companies c
+                LEFT JOIN internships i ON c.id = i.company_id
+                GROUP BY c.id, c.name, c.industry
+                HAVING internship_count > 0
+                ORDER BY internship_count DESC
+                LIMIT 10";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 }

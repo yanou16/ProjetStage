@@ -140,16 +140,27 @@ class CompaniesController extends Controller {
     }
 
     public function stats() {
-        if ($this->userRole !== 'admin' && $this->userRole !== 'pilote') {
-            header('Location: /srx/companies');
-            exit;
-        }
+        // Récupérer le nombre total d'entreprises
+        $totalCompanies = $this->companyModel->count();
+
+        // Récupérer le nombre total de stages
+        $totalInternships = $this->companyModel->countInternships();
+
+        // Récupérer les statistiques par secteur
+        $sectorStats = $this->companyModel->getSectorStats();
+
+        // Récupérer le top des entreprises par nombre de stages
+        $topCompanies = $this->companyModel->getTopCompaniesByInternships();
 
         $data = [
             'title' => 'Statistiques des entreprises',
-            'stats' => $this->companyModel->getStats(),
+            'totalCompanies' => $totalCompanies,
+            'totalInternships' => $totalInternships,
+            'sectorStats' => $sectorStats,
+            'topCompanies' => $topCompanies,
             'user_role' => $this->userRole
         ];
+
         $this->renderView('companies/stats', $data);
     }
 }

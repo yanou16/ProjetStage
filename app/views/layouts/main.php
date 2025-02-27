@@ -214,9 +214,11 @@
                         <a href="/srx/internships/myWishlist"><i class="fas fa-star"></i> Favoris</a>
                     <?php endif; ?>
 
-                    <a href="/srx/pilots"><i class="fas fa-user-tie"></i> Pilotes</a>
                     <a href="/srx/companies"><i class="fas fa-building"></i> Entreprises</a>
                     <a href="/srx/internships"><i class="fas fa-briefcase"></i> Stages</a>
+                    <a href="/srx/users/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                <?php else: ?>
+                    <a href="/srx/users/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connexion</a>
                 <?php endif; ?>
             </nav>
             <?php if (isset($_SESSION['user'])): ?>

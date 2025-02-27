@@ -28,8 +28,7 @@ class User extends Model {
     }
 
     public function create($data) {
-        // S'assurer que le mot de passe est hashé
-        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+        // Le mot de passe est déjà hashé dans le contrôleur
         
         $sql = "INSERT INTO users (username, email, password, role_id, created_at) 
                 VALUES (?, ?, ?, ?, NOW())";
@@ -38,7 +37,7 @@ class User extends Model {
         return $stmt->execute([
             $data['username'],
             $data['email'],
-            $hashedPassword,
+            $data['password'],
             $data['role_id']
         ]);
     }
@@ -93,5 +92,25 @@ class User extends Model {
         $sql = "DELETE FROM users WHERE id = ?";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id]);
+    }
+
+    // Méthodes pour gérer les transactions
+    public function beginTransaction() {
+        return $this->db->beginTransaction();
+    }
+
+    public function commit() {
+        return $this->db->commit();
+    }
+
+    public function rollback() {
+        return $this->db->rollBack();
+    }
+
+    // Méthode pour supprimer les candidatures d'un utilisateur
+    public function deleteUserApplications($userId) {
+        $sql = "DELETE FROM internship_applications WHERE student_id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$userId]);
     }
 }

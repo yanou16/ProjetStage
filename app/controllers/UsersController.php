@@ -124,4 +124,61 @@ class UsersController extends Controller {
 
         $this->renderView('users/edit', $data);
     }
+
+    public function delete($id = null) {
+        // Vérifier si l'utilisateur est admin
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $this->setFlashMessage('danger', 'Accès non autorisé');
+            $this->redirect('/srx');
+        }
+
+        if (!$id) {
+            $this->setFlashMessage('danger', 'ID utilisateur non spécifié');
+            $this->redirect('/srx/users');
+        }
+
+        // Vérifier que l'utilisateur existe
+        $user = $this->userModel->findById($id);
+        if (!$user) {
+            $this->setFlashMessage('danger', 'Utilisateur non trouvé');
+            $this->redirect('/srx/users');
+        }
+
+        // On ne peut pas supprimer son propre compte
+        if ($_SESSION['user']['id'] == $id) {
+            $this->setFlashMessage('danger', 'Vous ne pouvez pas supprimer votre propre compte');
+            $this->redirect('/srx/users');
+        }
+
+        // Supprimer d'abord les candidatures associées à l'utilisateur
+        try {
+            // Début d'une transaction pour s'assurer que tout est supprimé correctement
+            $this->userModel->beginTransaction();
+            
+            // Supprimer les candidatures si c'est un étudiant
+            if ($user['role_id'] == 3) {
+                $this->userModel->deleteUserApplications($id);
+            }
+            
+            // Supprimer les autres références potentielles (à adapter selon votre schéma de base de données)
+            // Exemple: $this->userModel->deleteUserWishlists($id);
+            
+            // Enfin, supprimer l'utilisateur
+            if ($this->userModel->delete($id)) {
+                // Valider la transaction
+                $this->userModel->commit();
+                $this->setFlashMessage('success', 'Utilisateur supprimé avec succès');
+            } else {
+                // Annuler la transaction en cas d'erreur
+                $this->userModel->rollback();
+                $this->setFlashMessage('danger', 'Erreur lors de la suppression');
+            }
+        } catch (Exception $e) {
+            // Annuler la transaction en cas d'exception
+            $this->userModel->rollback();
+            $this->setFlashMessage('danger', 'Erreur: ' . $e->getMessage());
+        }
+
+        $this->redirect('/srx/users');
+    }
 }
