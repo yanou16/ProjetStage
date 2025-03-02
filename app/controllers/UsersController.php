@@ -181,4 +181,59 @@ class UsersController extends Controller {
 
         $this->redirect('/srx/users');
     }
+
+    public function login() {
+        // Si l'utilisateur est déjà connecté, le rediriger
+        if (isset($_SESSION['user'])) {
+            $this->redirect('/srx');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Récupérer et nettoyer les données du formulaire
+            $data = [
+                'email' => trim($_POST['email']),
+                'password' => $_POST['password']
+            ];
+
+            // Vérifier que les champs ne sont pas vides
+            if (empty($data['email']) || empty($data['password'])) {
+                $this->setFlashMessage('danger', 'Veuillez remplir tous les champs');
+            } else {
+                // Vérifier si l'utilisateur existe
+                $user = $this->userModel->findUserByEmail($data['email']);
+                
+                if ($user && password_verify($data['password'], $user['password'])) {
+                    // Créer la session avec le bon nom de rôle
+                    $_SESSION['user'] = [
+                        'id' => $user['id'],
+                        'username' => $user['username'],
+                        'email' => $user['email'],
+                        'role' => $user['role_name']  // Utiliser role_name au lieu de role
+                    ];
+                    
+                    $this->setFlashMessage('success', 'Connexion réussie');
+                    $this->redirect('/srx');
+                } else {
+                    $this->setFlashMessage('danger', 'Email ou mot de passe incorrect');
+                }
+            }
+        }
+
+        $data = [
+            'title' => 'Connexion'
+        ];
+
+        $this->renderView('users/login', $data);
+    }
+
+    public function logout() {
+        // Détruire la session
+        session_start();
+        session_unset();
+        session_destroy();
+        
+        // Rediriger vers la page d'accueil
+        $this->setFlashMessage('success', 'Vous avez été déconnecté avec succès');
+        $this->redirect('/srx');
+    }
 }

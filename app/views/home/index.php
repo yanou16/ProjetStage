@@ -10,21 +10,55 @@ if (isset($data)) {
     <div class="hero-shape"></div>
     <div class="container">
         <div class="hero-content">
-            <h1 class="hero-title">Votre carrière professionnelle commence ici</h1>
-            <p class="hero-text">Découvrez des centaines d'offres de stage adaptées à votre profil et lancez-vous dans l'expérience qui transformera votre avenir.</p>
-            <div class="hero-actions">
-                <a href="/srx/internships" class="btn btn-primary">
-                    <i class="fas fa-search"></i> Explorer les stages
-                </a>
-                <?php if (!isset($_SESSION['user'])): ?>
-                    <a href="/srx/auth/login" class="btn btn-outline">
-                        <i class="fas fa-user"></i> Se connecter
-                    </a>
-                <?php endif; ?>
+            <div class="hero-text-content">
+                <h1 class="hero-title">Construisez votre avenir professionnel</h1>
+                <p class="hero-text">La plateforme qui connecte les étudiants ambitieux aux meilleures opportunités de stage. Commencez votre voyage vers le succès dès aujourd'hui.</p>
+                
+                <div class="search-box">
+                    <div class="search-input-group">
+                        <div class="search-input">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Quel type de stage recherchez-vous ?">
+                        </div>
+                        <div class="search-input">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" placeholder="Où ?">
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Étudiants</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5K+</span>
+                        <span class="stat-label">Stages</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Satisfaction</span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="hero-image">
-            <img src="/srx/public/img/hero.svg" alt="Illustration" class="floating">
+            
+            <div class="hero-image">
+                <img src="/srx/public/img/hero-new.svg" alt="Illustration" class="floating">
+                <div class="hero-badges">
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        Stages vérifiés
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-bolt"></i>
+                        Réponse rapide
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -131,9 +165,12 @@ if (isset($data)) {
 .hero {
     position: relative;
     padding: 6rem 0;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, #4338CA 0%, #3B82F6 100%);
     color: white;
     overflow: hidden;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
 }
 
 .hero-shape {
@@ -147,32 +184,132 @@ if (isset($data)) {
 }
 
 .hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.2fr 0.8fr;
     gap: 4rem;
     align-items: center;
 }
 
 .hero-title {
-    font-size: 3.5rem;
-    font-weight: 700;
+    font-size: 4rem;
+    font-weight: 800;
     line-height: 1.2;
     margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #ffffff, #e0e7ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero-text {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
     opacity: 0.9;
+    line-height: 1.6;
+    max-width: 600px;
 }
 
-.hero-actions {
+.search-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.search-input-group {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.search-input i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+.search-input input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #ffffff, #e0e7ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
 }
 
 .hero-image {
     position: relative;
+}
+
+.hero-badges {
+    position: absolute;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.badge i {
+    color: #10B981;
 }
 
 .floating {
@@ -183,6 +320,31 @@ if (isset($data)) {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
     100% { transform: translateY(0px); }
+}
+
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-image {
+        display: none;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-input-group {
+        flex-direction: column;
+    }
+    
+    .hero-stats {
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
 }
 
 /* Stats Section */

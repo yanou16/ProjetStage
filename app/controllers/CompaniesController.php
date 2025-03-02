@@ -2,23 +2,43 @@
 
 class CompaniesController extends Controller {
     private $companyModel;
-    private $userRole;
 
     public function __construct() {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /srx/auth/login');
-            exit;
-        }
+        parent::__construct();
+        $this->companyModel = $this->loadModel('Company');
         
-        $this->companyModel = new Company();
-        $this->userRole = $_SESSION['user']['role'];
+        // Vérifier si l'utilisateur est connecté
+        if (!isset($_SESSION['user'])) {
+            $this->setFlashMessage('danger', 'Veuillez vous connecter');
+            $this->redirect('/srx/users/login');
+            return;
+        }
+
+        // Vérifier les permissions pour les actions de modification
+        $userRole = $_SESSION['user']['role'] ?? null;
+        $currentAction = $this->getCurrentAction();
+        
+        // Liste des actions réservées aux admin/pilote
+        $restrictedActions = ['create', 'edit', 'delete', 'stats'];
+        
+        if (in_array($currentAction, $restrictedActions) && !in_array($userRole, ['admin', 'pilote'])) {
+            $this->setFlashMessage('danger', 'Accès non autorisé');
+            $this->redirect('/srx/companies');
+            return;
+        }
+    }
+
+    private function getCurrentAction() {
+        $url = $_SERVER['REQUEST_URI'];
+        $parts = explode('/', trim($url, '/'));
+        return isset($parts[2]) ? $parts[2] : 'index';
     }
 
     public function index() {
         $data = [
             'title' => 'Gestion des entreprises',
             'companies' => $this->companyModel->getAll(),
-            'user_role' => $this->userRole
+            'user_role' => $_SESSION['user']['role']
         ];
         $this->renderView('companies/index', $data);
     }
@@ -30,11 +50,6 @@ class CompaniesController extends Controller {
     }
 
     public function create() {
-        if ($this->userRole !== 'admin' && $this->userRole !== 'pilote') {
-            header('Location: /srx/companies');
-            exit;
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($this->companyModel->create($_POST)) {
                 $_SESSION['flash_message'] = [
@@ -48,17 +63,12 @@ class CompaniesController extends Controller {
         
         $data = [
             'title' => 'Créer une entreprise',
-            'user_role' => $this->userRole
+            'user_role' => $_SESSION['user']['role']
         ];
         $this->renderView('companies/create', $data);
     }
 
     public function edit($id) {
-        if ($this->userRole !== 'admin' && $this->userRole !== 'pilote') {
-            header('Location: /srx/companies');
-            exit;
-        }
-
         $company = $this->companyModel->find($id);
         if (!$company) {
             header('Location: /srx/companies');
@@ -79,7 +89,7 @@ class CompaniesController extends Controller {
         $data = [
             'title' => 'Modifier une entreprise',
             'company' => $company,
-            'user_role' => $this->userRole
+            'user_role' => $_SESSION['user']['role']
         ];
         $this->renderView('companies/edit', $data);
     }
@@ -103,7 +113,7 @@ class CompaniesController extends Controller {
             'title' => $company['name'],
             'company' => $company,
             'internships' => $internships,
-            'user_role' => $this->userRole
+            'user_role' => $_SESSION['user']['role']
         ];
 
         $this->renderView('companies/view', $data);
@@ -127,13 +137,11 @@ class CompaniesController extends Controller {
     }
 
     public function delete($id) {
-        if ($this->userRole === 'admin') {
-            if ($this->companyModel->delete($id)) {
-                $_SESSION['flash_message'] = [
-                    'type' => 'success',
-                    'message' => 'Entreprise supprimée avec succès'
-                ];
-            }
+        if ($this->companyModel->delete($id)) {
+            $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Entreprise supprimée avec succès'
+            ];
         }
         header('Location: /srx/companies');
         exit;
@@ -158,7 +166,7 @@ class CompaniesController extends Controller {
             'totalInternships' => $totalInternships,
             'sectorStats' => $sectorStats,
             'topCompanies' => $topCompanies,
-            'user_role' => $this->userRole
+            'user_role' => $_SESSION['user']['role']
         ];
 
         $this->renderView('companies/stats', $data);
