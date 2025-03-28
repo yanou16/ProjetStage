@@ -251,6 +251,7 @@
             <p class="mt-2">
                 <a href="/srx/privacy" class="text-gray">Politique de confidentialité</a> |
                 <a href="/srx/terms" class="text-gray">Conditions d'utilisation</a>
+                <a href="/srx/about">À propos</a>
             </p>
         </div>
     </footer>

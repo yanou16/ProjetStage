@@ -1,0 +1,1 @@
+{"version":1,"defects":{"DatabaseTest::testDatabaseConnection":5,"DatabaseTest::testQueryExecution":5,"InternshipTest::testCreateInternship":8},"times":{"DatabaseTest::testDatabaseConnection":0.004,"DatabaseTest::testQueryExecution":0.003,"InternshipTest::testCreateInternship":0.05}}
