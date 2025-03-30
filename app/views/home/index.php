@@ -1,5 +1,4 @@
 <?php
-// Extraction des variables
 if (isset($data)) {
     extract($data);
 }
@@ -7,27 +6,19 @@ if (isset($data)) {
 
 <!-- Hero Section -->
 <section class="hero">
-    <div class="hero-shape"></div>
     <div class="container">
         <div class="hero-content">
             <div class="hero-text-content">
-                <h1 class="hero-title">Construisez votre avenir professionnel</h1>
-                <p class="hero-text">La plateforme qui connecte les étudiants ambitieux aux meilleures opportunités de stage. Commencez votre voyage vers le succès dès aujourd'hui.</p>
+                <h1 class="hero-title">Avec Stageflow construisez votre avenir dans le monde du travail</h1>
+                <p class="hero-text">La plateforme qui connecte les étudiants ambitieux aux meilleures opportunités de stage en France.</p>
                 
-                <div class="search-box">
-                    <div class="search-input-group">
-                        <div class="search-input">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Quel type de stage recherchez-vous ?">
-                        </div>
-                        <div class="search-input">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <input type="text" placeholder="Où ?">
-                        </div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-search"></i> Rechercher
-                        </button>
-                    </div>
+                <div class="hero-buttons">
+                    <a href="/srx/internships" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Voir les offres
+                    </a>
+                    <a href="/srx/companies" class="btn btn-outline">
+                        <i class="fas fa-building"></i> Entreprises
+                    </a>
                 </div>
 
                 <div class="hero-stats">
@@ -45,57 +36,6 @@ if (isset($data)) {
                     </div>
                 </div>
             </div>
-            
-            <div class="hero-image">
-                <img src="/srx/public/img/hero-new.svg" alt="Illustration" class="floating">
-                <div class="hero-badges">
-                    <div class="badge">
-                        <i class="fas fa-check-circle"></i>
-                        Stages vérifiés
-                    </div>
-                    <div class="badge">
-                        <i class="fas fa-bolt"></i>
-                        Réponse rapide
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Stats Section -->
-<section class="stats">
-    <div class="container">
-        <h2 class="section-title">Notre impact en chiffres</h2>
-        <div class="stats-grid">
-            <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
-                <div class="stat-icon">
-                    <i class="fas fa-building"></i>
-                </div>
-                <h3>850+</h3>
-                <p>Entreprises partenaires</p>
-            </div>
-            <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="stat-icon">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                <h3>1200+</h3>
-                <p>Offres actives</p>
-            </div>
-            <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="stat-icon">
-                    <i class="fas fa-smile"></i>
-                </div>
-                <h3>95%</h3>
-                <p>De satisfaction</p>
-            </div>
-            <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <h3>24h</h3>
-                <p>Réponse moyenne</p>
-            </div>
         </div>
     </div>
 </section>
@@ -105,82 +45,82 @@ if (isset($data)) {
     <div class="container">
         <h2 class="section-title">Pourquoi choisir notre plateforme ?</h2>
         <div class="features-grid">
-            <div class="feature-card" data-aos="fade-up">
+            <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-search"></i>
                 </div>
                 <h3>Recherche avancée</h3>
                 <p>Trouvez des offres par compétences, localisation ou secteur d'activité.</p>
             </div>
-            <div class="feature-card" data-aos="fade-up">
+            <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <h3>Tableau de bord</h3>
                 <p>Suivez vos candidatures et statistiques en temps réel.</p>
             </div>
-            <div class="feature-card" data-aos="fade-up">
+            <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-user-tie"></i>
                 </div>
                 <h3>Gestion simplifiée</h3>
                 <p>Créez et gérez votre profil professionnel en quelques clics.</p>
             </div>
-            <div class="feature-card" data-aos="fade-up">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>Sécurité des données</h3>
-                <p>Plateforme conforme RGPD avec chiffrement des données.</p>
-            </div>
         </div>
     </div>
 </section>
 
-<!-- Partners Section -->
-<section class="partners">
+<!-- Important Info Section -->
+<section class="important-info">
     <div class="container">
-        <h2 class="section-title">Nos entreprises partenaires</h2>
-        <div class="partners-slider">
-            <div class="partners-track">
-                <div class="partner-logo">
-                    <img src="/srx/public/img/companies/microsoft.png" alt="Microsoft">
+        <h2 class="section-title">Informations clés pour votre recherche</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
                 </div>
-                <div class="partner-logo">
-                    <img src="/srx/public/img/companies/apple.png" alt="Apple">
+                <h3>Environnement sécurisé</h3>
+                <p>Données cryptées et conformité RGPD garantie. Nous protégeons vos informations personnelles.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
                 </div>
-                <div class="partner-logo">
-                    <img src="/srx/public/img/companies/google.png" alt="Google">
+                <h3>Support réactif</h3>
+                <p>Assistance 7j/7 par nos conseillers spécialisés. Réponse sous 24h maximum.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-handshake"></i>
                 </div>
-                <div class="partner-logo">
-                    <img src="/srx/public/img/companies/meta.png" alt="Meta">
-                </div>
+                <h3>Partenariats vérifiés</h3>
+                <p>Entreprises et écoles partenaires rigoureusement sélectionnées pour votre sécurité.</p>
             </div>
         </div>
     </div>
 </section>
 
 <style>
-/* Hero Section */
-.hero {
-    position: relative;
-    padding: 6rem 0;
-    background: linear-gradient(135deg, #4338CA 0%, #3B82F6 100%);
-    color: white;
-    overflow: hidden;
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #3b82f6;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --white: #ffffff;
 }
 
-.hero-shape {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50%;
-    height: 100%;
-    background: rgba(255,255,255,0.1);
-    clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    padding: 4rem 0;
+    position: relative;
 }
 
 .hero .container {
@@ -190,19 +130,17 @@ if (isset($data)) {
 
 .hero-content {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
 }
 
 .hero-title {
-    font-size: 4rem;
-    font-weight: 800;
+    font-size: 3.5rem;
+    font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1.5rem;
-    background: linear-gradient(to right, #ffffff, #e0e7ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--white);
 }
 
 .hero-text {
@@ -210,49 +148,44 @@ if (isset($data)) {
     margin-bottom: 2.5rem;
     opacity: 0.9;
     line-height: 1.6;
-    max-width: 600px;
 }
 
-.search-box {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 2rem;
-    margin-bottom: 2.5rem;
-}
-
-.search-input-group {
+.hero-buttons {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
 }
 
-.search-input {
-    flex: 1;
-    min-width: 200px;
-    position: relative;
-}
-
-.search-input i {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.search-input input {
-    width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+.btn {
+    padding: 1rem 2rem;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 1rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
-.search-input input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+.btn-primary {
+    background: var(--white);
+    color: var(--primary);
+    border: 2px solid transparent;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid var(--white);
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .hero-stats {
@@ -262,246 +195,129 @@ if (isset($data)) {
 }
 
 .stat-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    text-align: center;
 }
 
 .stat-number {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(to right, #ffffff, #e0e7ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    display: block;
+    color: var(--white);
 }
 
 .stat-label {
     font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     opacity: 0.8;
-}
-
-.hero-image {
-    position: relative;
-}
-
-.hero-badges {
-    position: absolute;
-    right: -2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.badge {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 1rem;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.badge i {
-    color: #10B981;
-}
-
-.floating {
-    animation: floating 3s ease-in-out infinite;
-}
-
-@keyframes floating {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
-}
-
-@media (max-width: 1024px) {
-    .hero-content {
-        grid-template-columns: 1fr;
-    }
-    
-    .hero-image {
-        display: none;
-    }
-    
-    .hero-title {
-        font-size: 3rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .search-input-group {
-        flex-direction: column;
-    }
-    
-    .hero-stats {
-        flex-wrap: wrap;
-        gap: 2rem;
-    }
-}
-
-/* Stats Section */
-.stats {
-    padding: 6rem 0;
-    background: white;
-}
-
-.section-title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: var(--dark);
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-.stat-card {
-    text-align: center;
-    padding: 2rem;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-}
-
-.stat-icon {
-    font-size: 2.5rem;
-    color: var(--primary);
-    margin-bottom: 1rem;
-}
-
-.stat-card h3 {
-    font-size: 2.5rem;
-    color: var(--primary);
-    margin-bottom: 0.5rem;
 }
 
 /* Features Section */
 .features {
     padding: 6rem 0;
-    background: var(--light);
+    background: var(--white);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
+    color: var(--dark);
 }
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .feature-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 20px;
     text-align: center;
-    transition: all 0.3s ease;
+    padding: 2rem;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transform: translateY(-10px);
 }
 
 .feature-icon {
-    font-size: 2rem;
-    color: var(--primary);
-    margin-bottom: 1.5rem;
-}
-
-/* Partners Section */
-.partners {
-    padding: 6rem 0;
-    background: white;
-}
-
-.partners-slider {
-    overflow: hidden;
-    padding: 2rem 0;
-}
-
-.partners-track {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--primary);
     display: flex;
-    animation: slide 20s linear infinite;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: var(--white);
+    font-size: 1.5rem;
 }
 
-.partner-logo {
-    flex: 0 0 250px;
-    padding: 2rem;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
+.feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
 }
 
-.partner-logo:hover {
-    opacity: 1;
+.feature-card p {
+    color: #64748b;
+    line-height: 1.6;
 }
 
-.partner-logo img {
-    max-width: 100%;
-    height: auto;
+/* Important Info Section */
+.important-info {
+    background: var(--primary);
+    padding: 6rem 0;
+    color: var(--white);
 }
 
-@keyframes slide {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
+.important-info .section-title {
+    color: var(--white);
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-    .hero .container {
+.important-info .feature-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.important-info .feature-card h3 {
+    color: var(--white);
+}
+
+.important-info .feature-card p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.important-info .feature-icon {
+    background: var(--white);
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .hero-content {
         grid-template-columns: 1fr;
         text-align: center;
     }
 
-    .hero-actions {
-        justify-content: center;
+    .hero-buttons {
+        flex-direction: column;
     }
 
-    .hero-image {
-        display: none;
+    .features-grid,
+    .important-info .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 2rem;
     }
 
     .hero-title {
         font-size: 2.5rem;
     }
 }
-
-@media (max-width: 768px) {
-    .section-title {
-        font-size: 2rem;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 576px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-}
 </style>
-
-<!-- AOS Animation Library -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    AOS.init({
-        duration: 800,
-        once: true
-    });
-</script>

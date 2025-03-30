@@ -1,110 +1,55 @@
-<div class="container-fluid">
-    <div class="row">
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Statistiques des entreprises</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="/srx/companies" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> Retour
-                    </a>
-                </div>
+<div class="container-fluid vh-100 p-0 overflow-hidden">
+    <div class="row g-0 m-0">
+        <main class="col-12 p-0">
+            <!-- En-tête collé aux bords -->
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 border-bottom mx-3">
+                <h1 class="h4 mb-0">Statistiques des candidatures</h1>
+                <a href="/srx/companies" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour
+                </a>
             </div>
 
-            <div class="row">
-                <!-- Statistiques générales -->
-                <div class="col-md-6 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Vue d'ensemble</h5>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="p-3 bg-light rounded">
-                                        <h6 class="mb-0">Total des entreprises</h6>
-                                        <h2 class="mt-2 mb-0 text-primary"><?= $totalCompanies ?></h2>
-                                    </div>
+            <!-- Contenu principal sans marges latérales -->
+            <div class="row g-0 mx-0 mt-2">
+                <!-- Colonne gauche -->
+                <div class="col-md-4 p-2">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body p-3">
+                            <h5 class="card-title mb-3">Vue d'ensemble</h5>
+                            <div class="d-grid gap-2">
+                                <div class="bg-light rounded p-2">
+                                    <span class="text-muted">Stages</span>
+                                    <div class="h3 mb-0">3</div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="p-3 bg-light rounded">
-                                        <h6 class="mb-0">Total des stages</h6>
-                                        <h2 class="mt-2 mb-0 text-primary"><?= $totalInternships ?></h2>
-                                    </div>
+                                <div class="bg-light rounded p-2">
+                                    <span class="text-muted">Candidatures</span>
+                                    <div class="h3 mb-0">2</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Répartition par secteur -->
-                <div class="col-md-6 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Répartition par secteur</h5>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Secteur</th>
-                                            <th>Nombre d'entreprises</th>
-                                            <th>Pourcentage</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($sectorStats as $sector): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($sector['industry']) ?></td>
-                                            <td><?= $sector['count'] ?></td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" 
-                                                         style="width: <?= $sector['percentage'] ?>%"
-                                                         aria-valuenow="<?= $sector['percentage'] ?>" 
-                                                         aria-valuemin="0" 
-                                                         aria-valuemax="100">
-                                                        <?= number_format($sector['percentage'], 1) ?>%
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                <!-- Colonne centrale -->
+                <div class="col-md-4 p-2">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body p-3">
+                            <h5 class="card-title mb-3">Statuts des candidatures</h5>
+                            <div class="bg-light rounded p-2">
+                                <span class="text-muted">Pending</span>
+                                <div class="h3 mb-0">2</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Top entreprises par nombre de stages -->
-                <div class="col-md-12 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Top entreprises par nombre de stages</h5>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Entreprise</th>
-                                            <th>Secteur</th>
-                                            <th>Nombre de stages</th>
-                                            <th>Dernière offre</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($topCompanies as $company): ?>
-                                        <tr>
-                                            <td>
-                                                <a href="/srx/companies/view/<?= $company['id'] ?>">
-                                                    <?= htmlspecialchars($company['name']) ?>
-                                                </a>
-                                            </td>
-                                            <td><?= htmlspecialchars($company['industry']) ?></td>
-                                            <td>
-                                                <span class="badge bg-primary"><?= $company['internship_count'] ?></span>
-                                            </td>
-                                            <td><?= $company['last_internship_date'] ? date('d/m/Y', strtotime($company['last_internship_date'])) : '-' ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                <!-- Colonne droite -->
+                <div class="col-md-4 p-2">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body p-3">
+                            <h5 class="card-title mb-3">Stages populaires</h5>
+                            <div class="bg-light rounded p-2">
+                                <div class="h5 mb-0">Stage Candidatures Actions</div>
                             </div>
                         </div>
                     </div>
@@ -115,27 +60,19 @@
 </div>
 
 <style>
-.progress {
-    height: 20px;
-    background-color: #e9ecef;
-    border-radius: 10px;
-}
-
-.progress-bar {
-    background-color: var(--primary);
-    color: white;
-    text-align: center;
-    line-height: 20px;
-    border-radius: 10px;
+.card {
+    border-radius: 8px !important;
 }
 
 .bg-light {
     background-color: #f8fafc !important;
-    border-radius: 8px;
 }
 
-.badge {
-    font-size: 0.9rem;
-    padding: 0.5em 1em;
+.h-100 {
+    height: calc(100% - 1rem) !important;
+}
+
+.container-fluid {
+    background-color: #ffffff;
 }
 </style>

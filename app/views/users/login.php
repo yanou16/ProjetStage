@@ -1,7 +1,7 @@
 <?php 
 $title = $data['title'];
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html>git status
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -76,7 +76,7 @@ $title = $data['title'];
                     <div class="text-center mb-4">
                         <a href="/srx" class="text-decoration-none">
                             <i class="fas fa-graduation-cap fa-3x text-primary"></i>
-                            <h1 class="h3 mt-2">SRX - Gestion des stages</h1>
+                            <h1 class="h3 mt-2">Stageflow - Gestion des stages</h1>
                         </a>
                     </div>
                     <div class="card">

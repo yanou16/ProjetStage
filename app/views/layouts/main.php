@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'SRX - Gestion des stages' ?></title>
+    <title><?= $title ?? 'Stageflow - Gestion des stages' ?></title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -54,7 +54,7 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
@@ -70,6 +70,7 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
+            font-size: 0.85rem; /* Taille de police uniforme */
         }
 
         nav a:hover {
@@ -90,21 +91,19 @@
             border: none;
             background: none;
             outline: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             width: 200px;
         }
 
         .search-button {
-            background: none;
-            border: none;
-            color: var(--gray);
-            cursor: pointer;
+    
+            font-size: 0.9rem;
         }
 
         /* Main Content */
         main {
             margin-top: 80px;
-            min-height: calc(100vh - 80px - 100px);
+            min-height: calc(100vh - 80px - 160px);
         }
 
         /* Buttons */
@@ -154,11 +153,35 @@
 
         /* Footer */
         footer {
-            background: white;
-            padding: 2rem 0;
-            text-align: center;
+            background: var(--light);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
             color: var(--gray);
             border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        footer .container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            margin: 0 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+
+        footer p:first-child {
+            margin-bottom: 0.5rem;
         }
 
         /* Utilities */
@@ -193,6 +216,11 @@
             .search-input {
                 width: 100%;
             }
+
+            footer a {
+                display: block;
+                margin: 0.5rem 0;
+            }
         }
     </style>
 </head>
@@ -200,7 +228,7 @@
     <header>
         <div class="header-container">
             <a href="/srx" class="logo">
-                <i class="fas fa-graduation-cap"></i> SRX
+                <i class="fas fa-graduation-cap"></i> Stageflow
             </a>
             <nav>
                 <a href="/srx"><i class="fas fa-home"></i> Accueil</a>
@@ -247,12 +275,12 @@
 
     <footer>
         <div class="container">
-            <p> <?= date('Y') ?> SRX - Tous droits réservés</p>
-            <p class="mt-2">
-                <a href="/srx/privacy" class="text-gray">Politique de confidentialité</a> |
-                <a href="/srx/terms" class="text-gray">Conditions d'utilisation</a>
+            <p>&copy; <?= date('Y') ?> Stageflow - Tous droits réservés</p>
+            <div>
+                <a href="/srx/privacy">Politique de confidentialité</a> |
+                <a href="/srx/terms">Conditions d'utilisation</a> |
                 <a href="/srx/about">À propos</a>
-            </p>
+            </div>
         </div>
     </footer>
 

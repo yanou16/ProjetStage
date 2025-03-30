@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "../../.vscode"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../config"
+		},
+		{
+			"path": "../../databse"
+		},
+		{
+			"path": "../../public"
+		}
+	]
+}
