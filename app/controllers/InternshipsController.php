@@ -165,8 +165,8 @@ class InternshipsController extends Controller {
     }
 
     public function apply($id = null) {
-        if ($this->userRole !== 'student') {
-            $this->setFlashMessage('danger', 'Seuls les étudiants peuvent postuler aux stages');
+        if ($this->userRole !== 'student' && $this->userRole !== 'admin') {
+            $this->setFlashMessage('danger', 'Seuls les étudiants et les administrateurs peuvent postuler aux stages');
             $this->redirect('/srx/internships');
         }
 

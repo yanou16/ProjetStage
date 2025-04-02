@@ -56,7 +56,7 @@
                         </div>
 
                         <!-- Actions pour les étudiants -->
-                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'student'): ?>
+                        <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] === 'student' || $_SESSION['user']['role'] === 'admin') && $_SESSION['user']['role'] !== 'pilote'): ?>
                             <div class="student-actions">
                                 <div class="action-group">
                                     <!-- Wishlist -->
@@ -76,6 +76,34 @@
                                             <i class="bi bi-check-circle"></i> Déjà postulé
                                         </button>
                                     <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <!-- Modal de candidature -->
+                            <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form action="/srx/internships/apply/<?= $internship['id'] ?>" method="POST" enctype="multipart/form-data">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Postuler au stage</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="cv">CV (PDF uniquement)</label>
+                                                    <input type="file" class="form-control" id="cv" name="cv" accept=".pdf" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="message">Message de motivation</label>
+                                                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -133,34 +161,6 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de candidature -->
-    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="/srx/internships/apply/<?= $internship['id'] ?>" method="POST" enctype="multipart/form-data">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Postuler au stage</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="cv">CV (PDF uniquement)</label>
-                            <input type="file" class="form-control" id="cv" name="cv" accept=".pdf" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message de motivation</label>
-                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-primary">Envoyer</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
