@@ -69,11 +69,11 @@
                                     <!-- Postuler -->
                                     <?php if (!$hasApplied): ?>
                                         <button type="button" class="action-button apply-button" data-bs-toggle="modal" data-bs-target="#applyModal">
-                                            <i class="bi bi-send"></i> Postuler
+                                            <i class="bi bi-send-fill"></i> Postuler au stage
                                         </button>
                                     <?php else: ?>
                                         <button class="action-button applied-button" disabled>
-                                            <i class="bi bi-check-circle"></i> Déjà postulé
+                                            <i class="bi bi-check-circle-fill"></i> Candidature envoyée
                                         </button>
                                     <?php endif; ?>
                                 </div>
@@ -81,26 +81,49 @@
 
                             <!-- Modal de candidature -->
                             <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
-                                        <form action="/srx/internships/apply/<?= $internship['id'] ?>" method="POST" enctype="multipart/form-data">
+                                        <form action="/srx/internships/apply/<?= $internship['id'] ?>" method="POST" enctype="multipart/form-data" class="application-form">
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Postuler au stage</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <h5 class="modal-title">
+                                                    <i class="bi bi-send-fill me-2"></i>
+                                                    Postuler au stage
+                                                </h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="cv">CV (PDF uniquement)</label>
-                                                    <input type="file" class="form-control" id="cv" name="cv" accept=".pdf" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="message">Message de motivation</label>
-                                                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                                                <div class="form-section">
+                                                    <div class="form-group">
+                                                        <label for="cv" class="form-label">
+                                                            <i class="bi bi-file-earmark-pdf me-2"></i>
+                                                            CV (PDF uniquement)
+                                                        </label>
+                                                        <div class="custom-file-upload">
+                                                            <input type="file" class="form-control" id="cv" name="cv" accept=".pdf" required>
+                                                            <div class="file-upload-text">
+                                                                <i class="bi bi-cloud-arrow-up"></i>
+                                                                Glissez votre CV ici ou cliquez pour sélectionner
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group mt-4">
+                                                        <label for="message" class="form-label">
+                                                            <i class="bi bi-chat-text me-2"></i>
+                                                            Message de motivation
+                                                        </label>
+                                                        <textarea class="form-control custom-textarea" id="message" name="message" rows="6" required 
+                                                                  placeholder="Présentez-vous et expliquez pourquoi ce stage vous intéresse..."></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                    <i class="bi bi-x-lg"></i> Annuler
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="bi bi-send-fill"></i> Envoyer ma candidature
+                                                </button>
                                             </div>
                                         </form>
                                     </div>
@@ -288,46 +311,67 @@
 
 .student-actions {
     margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #eee;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .action-group {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: center;
+    justify-content: flex-start;
 }
 
 .action-button {
     padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    border-radius: 10px;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     transition: all 0.3s ease;
     border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 .apply-button {
-    background: #28a745;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.apply-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
 }
 
 .applied-button {
-    background: #6c757d;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
     color: white;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
 }
 
 .wishlist-button {
-    background: #ffc107;
-    color: black;
+    background: white;
+    color: #f59e0b;
     padding: 0.75rem;
     border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 2px solid #f59e0b;
+}
+
+.wishlist-button:hover {
+    background: #f59e0b;
+    color: white;
+    transform: translateY(-2px);
 }
 
 .wishlist-button.active {
-    background: #ffc107;
-    color: black;
+    background: #f59e0b;
+    color: white;
 }
 
 .company-name a {
@@ -359,14 +403,161 @@
     gap: 0.5rem;
 }
 
+.modal-dialog {
+    max-width: 700px;
+}
+
 .modal-content {
-    border-radius: 12px;
-    overflow: hidden;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
-    background: #3498db;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
+    padding: 1.5rem;
+    border-bottom: none;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.form-section {
+    max-width: 100%;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.custom-file-upload {
+    position: relative;
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #f9fafb;
+}
+
+.custom-file-upload:hover {
+    border-color: #2563eb;
+    background: #f0f9ff;
+}
+
+.custom-file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-upload-text {
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.file-upload-text i {
+    font-size: 2rem;
+    color: #2563eb;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.custom-textarea {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
     padding: 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+.custom-textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 1.5rem 2rem;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #d1d5db;
+    background: white;
+    color: #4b5563;
+}
+
+.btn-outline-secondary:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+    color: #1f2937;
+}
+
+@media (max-width: 768px) {
+    .action-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .action-button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .wishlist-button {
+        width: auto;
+        align-self: center;
+    }
+    
+    .modal-dialog {
+        margin: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
 }
 </style>
