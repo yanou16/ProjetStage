@@ -200,7 +200,8 @@ $user_role = $_SESSION['user']['role'] ?? '';
                         </div>
                         <div class="company-rating">
                             <i class="fas fa-star"></i>
-                            <?= htmlspecialchars($company['rating'] ?? '4.5') ?>
+                            <?= number_format($company['rating'] ?? 0, 1) ?> 
+                            <span class="rating-count">(<?= $company['rating_count'] ?? 0 ?> avis)</span>
                         </div>
                     </div>
                     <div class="company-content">

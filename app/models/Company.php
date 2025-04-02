@@ -88,7 +88,8 @@ class Company extends Model {
 
     public function getAll() {
         $sql = "SELECT c.*, 
-                (SELECT AVG(rating) FROM company_ratings WHERE company_id = c.id) as rating
+                (SELECT AVG(rating) FROM company_ratings WHERE company_id = c.id) as rating,
+                (SELECT COUNT(*) FROM company_ratings WHERE company_id = c.id) as rating_count
             FROM companies c 
             ORDER BY c.name";
         $stmt = $this->db->prepare($sql);
@@ -106,11 +107,49 @@ class Company extends Model {
         return $stmt->fetchAll();
     }
 
-    public function rate($companyId, $userId, $rating, $comment) {
-        $sql = "INSERT INTO company_ratings (company_id, user_id, rating, comment, created_at) 
-                VALUES (?, ?, ?, ?, NOW())";
+    public function getAverageRating($companyId) {
+        $sql = "SELECT AVG(rating) as avg_rating 
+                FROM company_ratings 
+                WHERE company_id = ?";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$companyId, $userId, $rating, $comment]);
+        $stmt->execute([$companyId]);
+        $result = $stmt->fetch();
+        return $result ? round($result['avg_rating'], 1) : 0;
+    }
+
+    public function getRatingCount($companyId) {
+        $sql = "SELECT COUNT(*) as count 
+                FROM company_ratings 
+                WHERE company_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$companyId]);
+        $result = $stmt->fetch();
+        return $result ? $result['count'] : 0;
+    }
+
+    public function rate($companyId, $userId, $rating, $comment) {
+        // Vérifier si l'utilisateur a déjà noté cette entreprise
+        $sql = "SELECT id FROM company_ratings 
+                WHERE company_id = ? AND user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$companyId, $userId]);
+        $existing = $stmt->fetch();
+
+        if ($existing) {
+            // Mettre à jour la note existante
+            $sql = "UPDATE company_ratings 
+                    SET rating = ?, comment = ?
+                    WHERE company_id = ? AND user_id = ?";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$rating, $comment, $companyId, $userId]);
+        } else {
+            // Créer une nouvelle note
+            $sql = "INSERT INTO company_ratings 
+                    (company_id, user_id, rating, comment, created_at) 
+                    VALUES (?, ?, ?, ?, NOW())";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$companyId, $userId, $rating, $comment]);
+        }
     }
 
     public function getStats() {
@@ -198,5 +237,14 @@ class Company extends Model {
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
+    }
+
+    public function getUserRating($companyId, $userId) {
+        $sql = "SELECT rating, comment 
+                FROM company_ratings 
+                WHERE company_id = ? AND user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$companyId, $userId]);
+        return $stmt->fetch();
     }
 }

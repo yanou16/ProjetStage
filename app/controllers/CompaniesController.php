@@ -109,11 +109,19 @@ class CompaniesController extends Controller {
             $this->redirect('/srx/companies');
         }
 
+        // Récupérer la moyenne des notes et le nombre d'avis
+        $company['rating'] = $this->companyModel->getAverageRating($id);
+        $company['rating_count'] = $this->companyModel->getRatingCount($id);
+        
+        // Récupérer la note de l'utilisateur actuel
+        $userRating = $this->companyModel->getUserRating($id, $_SESSION['user']['id']);
+
         $data = [
             'title' => $company['name'],
             'company' => $company,
             'internships' => $internships,
-            'user_role' => $_SESSION['user']['role']
+            'user_role' => $_SESSION['user']['role'],
+            'user_rating' => $userRating
         ];
 
         $this->renderView('companies/view', $data);
@@ -122,18 +130,20 @@ class CompaniesController extends Controller {
     public function rate($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userId = $_SESSION['user']['id'];
-            $rating = $_POST['rating'];
-            $comment = $_POST['comment'];
+            $rating = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
+            $comment = $_POST['comment'] ?? '';
 
-            if ($this->companyModel->rate($id, $userId, $rating, $comment)) {
-                $_SESSION['flash_message'] = [
-                    'type' => 'success',
-                    'message' => 'Évaluation ajoutée avec succès'
-                ];
+            if ($rating < 1 || $rating > 5) {
+                $this->setFlashMessage('danger', 'La note doit être comprise entre 1 et 5');
+            } else {
+                if ($this->companyModel->rate($id, $userId, $rating, $comment)) {
+                    $this->setFlashMessage('success', 'Votre note a été enregistrée avec succès');
+                } else {
+                    $this->setFlashMessage('danger', 'Une erreur est survenue lors de l\'enregistrement de votre note');
+                }
             }
         }
-        header("Location: /srx/companies/view/$id");
-        exit;
+        $this->redirect("/srx/companies/view/$id");
     }
 
     public function delete($id) {

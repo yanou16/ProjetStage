@@ -135,6 +135,11 @@
                         <h2 class="section-title">Statistiques</h2>
                         <ul class="stats-list">
                             <li>
+                                <i class="fas fa-star text-yellow"></i>
+                                <span><?= number_format($company['rating'] ?? 0, 1) ?>/5 
+                                    (<?= $company['rating_count'] ?? 0 ?> avis)</span>
+                            </li>
+                            <li>
                                 <i class="bi bi-briefcase"></i>
                                 <span><?= count($internships) ?> stage(s)</span>
                             </li>
@@ -143,6 +148,29 @@
                                 <span>Membre depuis <?= (new DateTime($company['created_at']))->format('d/m/Y') ?></span>
                             </li>
                         </ul>
+                    </div>
+                </div>
+
+                <!-- Notation -->
+                <div class="info-card">
+                    <div class="card-body">
+                        <h2 class="section-title">Noter l'entreprise</h2>
+                        <form action="/srx/companies/rate/<?= $company['id'] ?>" method="POST" class="rating-form">
+                            <div class="rating-stars">
+                                <?php for($i = 5; $i >= 1; $i--): ?>
+                                    <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" 
+                                        <?= ($user_rating && $user_rating['rating'] == $i) ? 'checked' : '' ?> required>
+                                    <label for="star<?= $i ?>"><i class="fas fa-star"></i></label>
+                                <?php endfor; ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Commentaire (optionnel)</label>
+                                <textarea name="comment" id="comment" class="form-control" rows="3"><?= htmlspecialchars($user_rating['comment'] ?? '') ?></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <?= $user_rating ? 'Modifier ma note' : 'Envoyer' ?>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -314,13 +342,21 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .stats-list li {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.stats-list i {
+    color: var(--primary);
+    font-size: 1.2rem;
 }
 
 /* Boutons */
@@ -387,5 +423,95 @@
         width: 100%;
         justify-content: center;
     }
+}
+
+/* Ajout du style pour le système de notation */
+.rating-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.rating-stars {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.rating-stars input {
+    display: none;
+}
+
+.rating-stars label {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.rating-stars label:hover,
+.rating-stars label:hover ~ label,
+.rating-stars input:checked ~ label {
+    color: #fbbf24;
+}
+
+.rating-stars label:hover i,
+.rating-stars label:hover ~ label i,
+.rating-stars input:checked ~ label i {
+    transform: scale(1.2);
+}
+
+.rating-stars i {
+    transition: transform 0.2s ease;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-control {
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    resize: vertical;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.btn-submit {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.btn-submit:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.rating-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
 }
 </style>
