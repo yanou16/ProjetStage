@@ -1,7 +1,7 @@
 <?php 
 $title = $data['title'];
 ?>
-<!DOCTYPE html>git status
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">

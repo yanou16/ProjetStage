@@ -251,8 +251,8 @@ class InternshipsController extends Controller {
     }
 
     public function toggleWishlist($id = null) {
-        if ($this->userRole !== 'student') {
-            $this->setFlashMessage('danger', 'Seuls les étudiants peuvent ajouter des stages à leur wishlist');
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['student', 'admin'])) {
+            $this->setFlashMessage('danger', 'Seuls les étudiants et les administrateurs peuvent ajouter des stages à leur wishlist');
             $this->redirect('/srx/internships');
         }
 
@@ -296,7 +296,7 @@ class InternshipsController extends Controller {
     }
 
     public function myWishlist() {
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'student') {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['student', 'admin'])) {
             $this->setFlashMessage('danger', 'Accès non autorisé');
             $this->redirect('/srx/internships');
             return;

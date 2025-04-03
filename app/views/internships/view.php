@@ -201,7 +201,7 @@
             <li><a href="/srx/internships" class="nav-link"><i class="bi bi-briefcase"></i><span>Stages</span></a></li>
             <li><a href="/srx/companies" class="nav-link"><i class="bi bi-building"></i><span>Entreprises</span></a></li>
             <?php if (isset($_SESSION['user'])): ?>
-                <?php if ($_SESSION['user']['role'] === 'student'): ?>
+                <?php if ($_SESSION['user']['role'] === 'student' || $_SESSION['user']['role'] === 'admin'): ?>
                     <li><a href="/srx/internships/my_applications" class="nav-link"><i class="bi bi-file-earmark-text"></i><span>Mes candidatures</span></a></li>
                     <li><a href="/srx/internships/my_wishlist" class="nav-link"><i class="bi bi-star"></i><span>Ma wishlist</span></a></li>
                 <?php endif; ?>

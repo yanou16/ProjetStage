@@ -153,35 +153,112 @@
 
         /* Footer */
         footer {
-            background: var(--light);
-            padding: 3rem 0 2rem;
+            background: linear-gradient(to right, #1e293b, #334155);
+            color: #f8fafc;
+            padding: 4rem 0 2rem;
             margin-top: 4rem;
-            color: var(--gray);
-            border-top: 1px solid #e2e8f0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
         }
 
-        footer .container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
         }
 
-        footer a {
-            color: var(--gray);
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
             text-decoration: none;
-            transition: color 0.3s ease;
-            margin: 0 0.8rem;
-            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        footer a:hover {
-            color: var(--primary);
+        .footer-links a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
         }
 
-        footer p:first-child {
-            margin-bottom: 0.5rem;
+        .footer-contact {
+            color: #cbd5e1;
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
         }
 
         /* Utilities */
@@ -217,9 +294,26 @@
                 width: 100%;
             }
 
-            footer a {
-                display: block;
-                margin: 0.5rem 0;
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-section h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-links a {
+                justify-content: center;
+            }
+
+            .footer-contact p {
+                justify-content: center;
+            }
+
+            .footer-social {
+                justify-content: center;
             }
         }
     </style>
@@ -275,11 +369,46 @@
 
     <footer>
         <div class="container">
-            <p>&copy; <?= date('Y') ?> Stageflow - Tous droits réservés</p>
-            <div>
-                <a href="/srx/privacy">Politique de confidentialité</a> |
-                <a href="/srx/terms">Conditions d'utilisation</a> |
-                <a href="/srx/about">À propos</a>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>À propos</h3>
+                    <p class="footer-contact">
+                        Stageflow est la plateforme de gestion de stages de référence pour les étudiants et les entreprises.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Liens rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="/srx/internships"><i class="fas fa-briefcase"></i> Offres de stages</a></li>
+                        <li><a href="/srx/companies"><i class="fas fa-building"></i> Entreprises</a></li>
+                        <?php if (isset($_SESSION['user'])): ?>
+                            <?php if ($_SESSION['user']['role'] === 'student' || $_SESSION['user']['role'] === 'admin'): ?>
+                                <li><a href="/srx/internships/my_applications"><i class="fas fa-file-alt"></i> Mes candidatures</a></li>
+                                <li><a href="/srx/internships/my_wishlist"><i class="fas fa-star"></i> Ma wishlist</a></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Rue de l'Innovation, 75000 Paris</p>
+                        <p><i class="fas fa-phone"></i> +33 1 23 45 67 89</p>
+                        <p><i class="fas fa-envelope"></i> contact@stageflow.fr</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <?= date('Y') ?> Stageflow. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
