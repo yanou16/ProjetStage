@@ -1,7 +1,10 @@
 Options -Indexes
 
 RewriteEngine On
-RewriteBase /srx/public/
+RewriteBase /srx/
+
+# Rediriger les requêtes de CV vers le contrôleur
+RewriteRule ^uploads/cv/(.+)$ index.php?controller=uploads&action=cv&params[]=$1 [L,QSA]
 
 # Si ce n'est pas un fichier
 RewriteCond %{REQUEST_FILENAME} !-f

@@ -83,6 +83,19 @@ class Student {
         return $this->db->query($sql)->fetchAll();
     }
 
+    public function getAllByPilot($pilotId) {
+        $sql = "SELECT u.*, p.name as promotion_name 
+                FROM users u 
+                LEFT JOIN promotions p ON u.promotion_id = p.id 
+                LEFT JOIN pilot_promotions pp ON p.id = pp.promotion_id
+                WHERE u.role_id = 3 
+                AND pp.pilot_id = ?
+                ORDER BY u.lastname, u.firstname";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$pilotId]);
+        return $stmt->fetchAll();
+    }
+
     public function getStats() {
         $stats = [];
         
