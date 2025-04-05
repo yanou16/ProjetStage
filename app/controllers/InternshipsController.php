@@ -279,7 +279,7 @@ class InternshipsController extends Controller {
     }
 
     public function myApplications() {
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'student') {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['student', 'admin'])) {
             $this->setFlashMessage('danger', 'Accès non autorisé');
             $this->redirect('/srx/internships');
             return;

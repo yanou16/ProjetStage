@@ -53,6 +53,32 @@
             padding: 0 2rem;
         }
 
+        .nav-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
         .logo {
             font-size: 1.3rem;
             font-weight: 700;
@@ -60,21 +86,30 @@
             text-decoration: none;
         }
 
-        nav {
-            display: flex;
-            gap: 2rem;
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
         }
 
-        nav a {
+        .bar {
+            display: block;
+            width: 25px;
+            height: 2px;
+            margin: 5px auto;
+            transition: all 0.3s ease;
+            background-color: var(--dark);
+        }
+
+        .close-menu {
+            display: none;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
             color: var(--dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            font-size: 0.85rem; /* Taille de police uniforme */
-        }
-
-        nav a:hover {
-            color: var(--primary);
+            cursor: pointer;
+            z-index: 1001;
         }
 
         .search-bar {
@@ -98,6 +133,25 @@
         .search-button {
     
             font-size: 0.9rem;
+        }
+
+        .logout-button {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: none; /* On le cache complètement car on utilise uniquement la version mobile */
+        }
+
+        .user-name {
+            color: var(--dark);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         /* Main Content */
@@ -276,81 +330,114 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header-container {
+            .nav-links {
+                position: fixed;
+                right: -100%;
+                top: 0;
                 flex-direction: column;
+                background-color: white;
+                width: 80%;
+                height: 100vh;
+                padding: 6rem 2rem;
+                transition: 0.3s ease-in-out;
+                margin: 0;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links .user-info-mobile {
+                margin-top: 2rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(0,0,0,0.1);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 gap: 1rem;
             }
 
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
+            .nav-links.active {
+                right: 0;
             }
 
-            .search-bar {
-                width: 100%;
+            .hamburger {
+                display: block;
             }
 
-            .search-input {
-                width: 100%;
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
             }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(7px) rotate(45deg);
             }
 
-            .footer-section h3::after {
-                left: 50%;
-                transform: translateX(-50%);
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-7px) rotate(-45deg);
             }
 
-            .footer-links a {
-                justify-content: center;
+            .nav-links a {
+                font-size: 1.1rem;
+                padding: 1rem 0;
             }
 
-            .footer-contact p {
-                justify-content: center;
+            .header-container {
+                padding: 0 1rem;
             }
+        }
 
-            .footer-social {
-                justify-content: center;
-            }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-links a {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+            animation-delay: calc(0.1s * var(--i));
         }
     </style>
 </head>
 <body>
     <header>
         <div class="header-container">
-            <a href="/srx" class="logo">
-                <i class="fas fa-graduation-cap"></i> Stageflow
-            </a>
-            <nav>
-                <a href="/srx"><i class="fas fa-home"></i> Accueil</a>
-                <?php if (isset($_SESSION['user'])): ?>
-                    <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-                        <a href="/srx/users"><i class="fas fa-users"></i> Utilisateurs</a>
-                    <?php endif; ?>
-                    
-                    <?php if ($_SESSION['user']['role'] === 'student'): ?>
-                        <a href="/srx/internships/myApplications"><i class="fas fa-file-alt"></i> Mes candidatures</a>
-                        <a href="/srx/internships/myWishlist"><i class="fas fa-star"></i> Favoris</a>
-                    <?php endif; ?>
+            <div class="nav-group">
+                <a href="/srx" class="logo">StageFlow</a>
+                <nav>
+                    <div class="nav-links">
+                        <?php if (isset($_SESSION['user'])): ?>
+                            <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                                <a href="/srx/users" style="--i:1"><i class="fas fa-users"></i> Utilisateurs</a>
+                                <a href="/srx/internships/myApplications" style="--i:2"><i class="fas fa-file-alt"></i> Mes candidatures</a>
+                                <a href="/srx/internships/myWishlist" style="--i:3"><i class="fas fa-star"></i> Favoris</a>
+                            <?php endif; ?>
+                            
+                            <?php if ($_SESSION['user']['role'] === 'student'): ?>
+                                <a href="/srx/internships/myApplications" style="--i:1"><i class="fas fa-file-alt"></i> Mes candidatures</a>
+                                <a href="/srx/internships/myWishlist" style="--i:2"><i class="fas fa-star"></i> Favoris</a>
+                            <?php endif; ?>
 
-                    <a href="/srx/companies"><i class="fas fa-building"></i> Entreprises</a>
-                    <a href="/srx/internships"><i class="fas fa-briefcase"></i> Stages</a>
-                    <a href="/srx/users/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
-                <?php else: ?>
-                    <a href="/srx/users/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connexion</a>
-                <?php endif; ?>
-            </nav>
-            <?php if (isset($_SESSION['user'])): ?>
-                <div class="search-bar">
-                    <input type="search" class="search-input" placeholder="Rechercher...">
-                    <button class="search-button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            <?php endif; ?>
+                            <?php if ($_SESSION['user']['role'] === 'pilote'): ?>
+                                
+                            <?php endif; ?>
+
+                            <a href="/srx/companies" style="--i:4"><i class="fas fa-building"></i> Entreprises</a>
+                            <a href="/srx/internships" style="--i:5"><i class="fas fa-briefcase"></i> Stages</a>
+                            
+                            <div class="user-info-mobile">
+                                <span class="user-name"><i class="fas fa-user"></i> <?= htmlspecialchars($_SESSION['user']['name'] ?? $_SESSION['user']['email']) ?></span>
+                                <a href="/srx/users/logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                            </div>
+                        <?php else: ?>
+                            <a href="/srx/users/login" class="btn-login" style="--i:1"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                        <?php endif; ?>
+                    </div>
+                </nav>
+            </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </div>
     </header>
 
@@ -372,7 +459,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>À propos</h3>
-                    <p class="footer-contact">
+                    <p class="footer-description">
                         Stageflow est la plateforme de gestion de stages de référence pour les étudiants et les entreprises.
                     </p>
                     <div class="footer-social">
@@ -386,14 +473,10 @@
                 <div class="footer-section">
                     <h3>Liens rapides</h3>
                     <ul class="footer-links">
-                        <li><a href="/srx/internships"><i class="fas fa-briefcase"></i> Offres de stages</a></li>
-                        <li><a href="/srx/companies"><i class="fas fa-building"></i> Entreprises</a></li>
-                        <?php if (isset($_SESSION['user'])): ?>
-                            <?php if ($_SESSION['user']['role'] === 'student' || $_SESSION['user']['role'] === 'admin'): ?>
-                                <li><a href="/srx/internships/my_applications"><i class="fas fa-file-alt"></i> Mes candidatures</a></li>
-                                <li><a href="/srx/internships/my_wishlist"><i class="fas fa-star"></i> Ma wishlist</a></li>
-                            <?php endif; ?>
-                        <?php endif; ?>
+                       
+                        <li><a href="/srx/about"><i class="fas fa-info-circle"></i> À propos</a></li>
+                        <li><a href="/srx/privacy"><i class="fas fa-shield-alt"></i> Politique de confidentialité</a></li>
+                        <li><a href="/srx/terms"><i class="fas fa-gavel"></i> Conditions d'utilisation</a></li>
                     </ul>
                 </div>
 
@@ -414,5 +497,24 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-links a');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

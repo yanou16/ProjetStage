@@ -10,7 +10,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/srx/students">
+                        <a class="nav-link text-white" href="/srx/pilotstudents">
                             <i class="bi bi-mortarboard"></i> Mes Étudiants
                         </a>
                     </li>
