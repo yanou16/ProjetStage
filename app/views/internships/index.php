@@ -1,11 +1,31 @@
 <div class="hero-section">
-    <div class="container">
-        <h1 class="hero-title">Offres de stage</h1>
-        <p class="hero-subtitle">Découvrez les opportunités de stage disponibles</p>
+    <div id="particles-js"></div>
+    <div class="container hero-content">
+        <h1 class="hero-title" data-aos="fade-up">
+            <span class="gradient-text">Découvrez votre futur stage</span>
+        </h1>
+        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
+            Des opportunités uniques pour lancer votre carrière
+        </p>
+        
+        <div class="stats-counter" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-item">
+                <div class="stat-value" id="internshipCount">
+                    <?= count($internships) ?>
+                </div>
+                <div class="stat-label">Stages disponibles</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="companyCount">
+                    <?= count($companies) ?>
+                </div>
+                <div class="stat-label">Entreprises</div>
+            </div>
+        </div>
         
         <?php if ($_SESSION['user']['role'] !== 'student'): ?>
-        <div class="header-actions">
-            <a href="/srx/internships/stats" class="btn btn-secondary">
+        <div class="header-actions" data-aos="fade-up" data-aos-delay="300">
+            <a href="/srx/internships/stats" class="btn btn-glass">
                 <i class="fas fa-chart-bar"></i> Statistiques
             </a>
             <a href="/srx/internships/create" class="btn btn-primary">
@@ -18,52 +38,69 @@
 
 <div class="page-container">
     <div class="container">
-        <!-- Filtres -->
-        <div class="filters-section">
-            <div class="filter-group">
-                <div class="icon-input">
-                    <i class="fas fa-building"></i>
-                    <select id="companyFilter" class="form-control">
-                        <option value="">Toutes les entreprises</option>
-                        <?php foreach ($companies as $company): ?>
-                            <option value="<?= $company['id'] ?>" 
-                                    <?= isset($_GET['company_id']) && $_GET['company_id'] == $company['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($company['name']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-            <div class="filter-group">
-                <div class="icon-input">
-                    <i class="fas fa-tools"></i>
-                    <input type="text" id="skillsFilter" class="form-control" 
-                           placeholder="Filtrer par compétences..." 
-                           value="<?= htmlspecialchars($_GET['skills'] ?? '') ?>">
-                </div>
-            </div>
-            <div class="filter-group">
+        <!-- Filtres avec animation -->
+        <div class="filters-section" data-aos="fade-down">
+            <div class="search-box-wrapper">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInternship" 
-                           placeholder="Rechercher une offre..."
+                           placeholder="Rechercher par titre, entreprise ou compétences..."
                            value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+                </div>
+            </div>
+            
+            <div class="filters-advanced">
+                <div class="filter-group">
+                    <div class="icon-input">
+                        <i class="fas fa-building"></i>
+                        <select id="companyFilter" class="form-control">
+                            <option value="">Toutes les entreprises</option>
+                            <?php foreach ($companies as $company): ?>
+                                <option value="<?= $company['id'] ?>" 
+                                        <?= isset($_GET['company_id']) && $_GET['company_id'] == $company['id'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($company['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="icon-input">
+                        <i class="fas fa-tools"></i>
+                        <input type="text" id="skillsFilter" class="form-control" 
+                               placeholder="Filtrer par compétences..." 
+                               value="<?= htmlspecialchars($_GET['skills'] ?? '') ?>">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Liste des offres -->
+        <!-- Liste des offres avec animation -->
         <div class="internships-grid">
             <?php if (!empty($internships)): ?>
-                <?php foreach ($internships as $internship): ?>
-                    <div class="internship-card">
+                <?php foreach ($internships as $index => $internship): ?>
+                    <div class="internship-card" data-aos="fade-up" data-aos-delay="<?= $index * 50 ?>">
+                        <div class="card-shine"></div>
                         <div class="internship-header">
                             <div class="company-logo">
-                                <i class="fas fa-building"></i>
+                                <?php
+                                $colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+                                $color = $colors[array_rand($colors)];
+                                $initials = strtoupper(substr($internship['company_name'], 0, 2));
+                                ?>
+                                <div class="logo-circle" style="background: <?= $color ?>">
+                                    <?= $initials ?>
+                                </div>
                             </div>
-                            <div class="duration">
-                                <i class="fas fa-calendar"></i>
-                                <?= $internship['duration'] ?> semaines
+                            <div class="internship-meta">
+                                <div class="duration">
+                                    <i class="fas fa-calendar"></i>
+                                    <?= $internship['duration'] ?> semaines
+                                </div>
+                                <div class="compensation">
+                                    <i class="fas fa-euro-sign"></i>
+                                    <?= number_format($internship['compensation'], 2) ?> € / mois
+                                </div>
                             </div>
                         </div>
 
@@ -73,7 +110,9 @@
                                 <i class="fas fa-building"></i>
                                 <?= htmlspecialchars($internship['company_name']) ?>
                             </div>
-                            <p class="internship-description"><?= nl2br(htmlspecialchars(substr($internship['description'], 0, 200))) ?>...</p>
+                            <p class="internship-description">
+                                <?= nl2br(htmlspecialchars(substr($internship['description'], 0, 150))) ?>...
+                            </p>
                             
                             <div class="skills-container">
                                 <?php
@@ -84,32 +123,34 @@
                                     </span>
                                 <?php endforeach; ?>
                             </div>
-                            
-                            <div class="internship-compensation">
-                                <i class="fas fa-euro-sign"></i>
-                                <?= number_format($internship['compensation'], 2) ?> € / mois
-                            </div>
                         </div>
 
                         <div class="internship-footer">
-                            <a href="/srx/internships/view/<?= $internship['id'] ?>" class="btn btn-primary">
-                                <i class="fas fa-eye"></i> Voir le profil
+                            <a href="/srx/internships/view/<?= $internship['id'] ?>" class="btn btn-primary btn-view">
+                                <span class="btn-content">
+                                    <i class="fas fa-eye"></i>
+                                    <span>Voir le profil</span>
+                                </span>
                             </a>
                             <?php if ($_SESSION['user']['role'] !== 'student'): ?>
-                                <a href="/srx/internships/edit/<?= $internship['id'] ?>" class="btn btn-edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" class="btn btn-delete" 
-                                        onclick="confirmDelete(<?= $internship['id'] ?>, '<?= htmlspecialchars($internship['title']) ?>')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                <div class="admin-actions">
+                                    <a href="/srx/internships/edit/<?= $internship['id'] ?>" class="btn btn-edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-delete" 
+                                            onclick="confirmDelete(<?= $internship['id'] ?>, '<?= htmlspecialchars($internship['title']) ?>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="empty-state">
-                    <i class="fas fa-briefcase"></i>
+                <div class="empty-state" data-aos="fade-up">
+                    <div class="empty-illustration">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
                     <h3>Aucune offre de stage trouvée</h3>
                     <?php if ($_SESSION['user']['role'] !== 'student'): ?>
                         <p>Commencez par ajouter une nouvelle offre de stage</p>
@@ -118,6 +159,7 @@
                         </a>
                     <?php else: ?>
                         <p>Aucune offre n'est disponible pour le moment</p>
+                        <p class="empty-subtitle">Revenez plus tard pour découvrir de nouvelles opportunités</p>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
@@ -125,236 +167,100 @@
     </div>
 </div>
 
+<!-- Styles -->
 <style>
 :root {
     --primary: #2563eb;
     --primary-dark: #1e40af;
+    --primary-light: #60a5fa;
     --white: #ffffff;
     --dark: #1e293b;
     --border: #e2e8f0;
     --text-secondary: #64748b;
     --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --purple: #8b5cf6;
 }
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    padding: 3rem 0;
+    position: relative;
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    padding: 6rem 0;
     color: var(--white);
     text-align: center;
+    overflow: hidden;
 }
 
-.hero-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    margin-bottom: 1.5rem;
-}
-
-.header-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1.5rem;
-}
-
-/* Page Container */
-.page-container {
-    padding: 2rem 0;
-    background: #f8fafc;
-}
-
-/* Filters Section */
-.filters-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.filter-group {
-    position: relative;
-}
-
-.icon-input {
-    position: relative;
-}
-
-.icon-input i {
+#particles-js {
     position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 1;
 }
 
-.icon-input select,
-.icon-input input {
-    width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    background-color: white;
-}
-
-.search-box {
+.hero-content {
     position: relative;
+    z-index: 2;
 }
 
-.search-box i {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
+.gradient-text {
+    background: linear-gradient(135deg, #60a5fa, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
 
-.search-box input {
-    width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
-    border: 1px solid var(--border);
-    border-radius: 50px;
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
 }
 
-/* Internships Grid */
-.internships-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-/* Internship Card */
-.internship-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.internship-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.internship-header {
-    background: var(--primary);
-    padding: 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--white);
-}
-
-.company-logo {
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.company-logo i {
+.hero-subtitle {
     font-size: 1.25rem;
-    color: var(--white);
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    font-weight: 400;
 }
 
-.duration {
+.stats-counter {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
+    justify-content: center;
+    gap: 3rem;
+    margin: 2rem 0;
 }
 
-.internship-body {
-    padding: 1.25rem;
+.stat-item {
+    text-align: center;
 }
 
-.internship-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 0.75rem;
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-light);
+    margin-bottom: 0.5rem;
 }
 
-.company-name {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-}
-
-.company-name i {
-    color: var(--primary);
-}
-
-.internship-description {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-}
-
-/* Skills */
-.skills-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.skill-badge {
-    background: #f1f5f9;
-    color: var(--primary);
-    padding: 0.4rem 0.8rem;
-    border-radius: 50px;
-    font-size: 0.85rem;
-}
-
-.internship-compensation {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--success);
-    font-weight: 500;
-    margin-bottom: 1rem;
-}
-
-.internship-footer {
-    padding: 1.25rem;
-    background: var(--white);
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
+.stat-label {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* Buttons */
 .btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    font-weight: 500;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    transition: all 0.2s ease;
-    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.3s ease;
     border: none;
     cursor: pointer;
 }
@@ -366,106 +272,447 @@
 
 .btn-primary:hover {
     background: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
-.btn-secondary {
-    background: #e2e8f0;
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white);
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Filters Section */
+.filters-section {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin: -4rem 2rem 2rem;
+    position: relative;
+    z-index: 3;
+}
+
+.search-box-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.search-box {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid var(--border);
+    border-radius: 50px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+.search-box i {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.filters-advanced {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Internships Grid */
+.internships-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Internship Card */
+.internship-card {
+    position: relative;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+}
+
+.internship-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.card-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 45%,
+        rgba(255, 255, 255, 0.1) 47%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.1) 53%,
+        transparent 55%
+    );
+    transform: translateX(-100%) translateY(-25%) rotate(0deg);
+    animation: shine 10s ease-in-out infinite;
+}
+
+.internship-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white);
+}
+
+.logo-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.internship-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: right;
+}
+
+.internship-body {
+    padding: 1.5rem;
+}
+
+.internship-title {
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--dark);
+    margin-bottom: 0.75rem;
 }
 
-.btn-secondary:hover {
-    background: #cbd5e1;
+.company-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 1rem;
 }
 
-.btn-edit {
-    background: #fbbf24;
-    color: white;
-    padding: 0.75rem;
+.internship-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
 }
 
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.skill-badge {
+    background: #f1f5f9;
+    color: var(--primary);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+.skill-badge:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.internship-footer {
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-view {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-view .btn-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-view::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+}
+
+.btn-view:hover::before {
+    animation: shine 1.5s infinite;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-edit,
 .btn-delete {
-    background: #ef4444;
-    color: white;
-    padding: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.btn-delete:hover {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
 }
 
 /* Empty State */
 .empty-state {
     text-align: center;
     padding: 4rem 2rem;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    grid-column: 1 / -1;
+    background: var(--white);
+    border-radius: 16px;
+    border: 2px dashed var(--border);
 }
 
-.empty-state i {
-    font-size: 3rem;
-    color: #60A5FA;
-    margin-bottom: 1rem;
+.empty-illustration {
+    font-size: 4rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
 }
 
 .empty-state h3 {
-    color: #2D3748;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
 }
 
 .empty-state p {
-    color: #718096;
+    color: var(--text-secondary);
     margin-bottom: 1.5rem;
 }
 
-/* Responsive */
+.empty-subtitle {
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+/* Animations */
+@keyframes shine {
+    0% {
+        transform: translateX(-100%) translateY(-25%) rotate(0deg);
+    }
+    20%, 100% {
+        transform: translateX(100%) translateY(-25%) rotate(0deg);
+    }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .stats-counter {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .filters-section {
+        margin: -2rem 1rem 1rem;
+        padding: 1.5rem;
+    }
+    
     .internships-grid {
         grid-template-columns: 1fr;
-        padding: 0 1rem;
-    }
-    
-    .header-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn {
-        width: 100%;
-        justify-content: center;
+        padding: 1rem;
     }
 }
 </style>
 
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
 <script>
-// Fonction pour appliquer les filtres
-function applyFilters() {
-    const company = document.getElementById('companyFilter').value;
-    const skills = document.getElementById('skillsFilter').value;
-    const search = document.getElementById('searchInternship').value;
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation des animations AOS
+    AOS.init({
+        duration: 800,
+        once: true
+    });
     
-    window.location.href = `/srx/internships?company_id=${company}&skills=${encodeURIComponent(skills)}&q=${encodeURIComponent(search)}`;
-}
-
-// Écouteurs d'événements pour les filtres
-document.getElementById('companyFilter').addEventListener('change', applyFilters);
-document.getElementById('skillsFilter').addEventListener('input', debounce(applyFilters, 500));
-document.getElementById('searchInternship').addEventListener('input', debounce(applyFilters, 500));
-
-// Fonction debounce pour limiter les appels
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
+    // Configuration de Particles.js
+    particlesJS('particles-js', {
+        particles: {
+            number: {
+                value: 80,
+                density: {
+                    enable: true,
+                    value_area: 800
+                }
+            },
+            color: {
+                value: '#ffffff'
+            },
+            shape: {
+                type: 'circle'
+            },
+            opacity: {
+                value: 0.5,
+                random: false
+            },
+            size: {
+                value: 3,
+                random: true
+            },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: '#ffffff',
+                opacity: 0.4,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 2,
+                direction: 'none',
+                random: false,
+                straight: false,
+                out_mode: 'out',
+                bounce: false
+            }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: {
+                onhover: {
+                    enable: true,
+                    mode: 'grab'
+                },
+                onclick: {
+                    enable: true,
+                    mode: 'push'
+                },
+                resize: true
+            },
+            modes: {
+                grab: {
+                    distance: 140,
+                    line_linked: {
+                        opacity: 1
+                    }
+                },
+                push: {
+                    particles_nb: 4
+                }
+            }
+        },
+        retina_detect: true
+    });
+    
+    // Animation des compteurs
+    function animateValue(element, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            element.innerHTML = Math.floor(progress * (end - start) + start);
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
         };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        window.requestAnimationFrame(step);
+    }
+    
+    // Animer les compteurs
+    const internshipCount = document.getElementById('internshipCount');
+    const companyCount = document.getElementById('companyCount');
+    
+    animateValue(internshipCount, 0, parseInt(internshipCount.innerText), 2000);
+    animateValue(companyCount, 0, parseInt(companyCount.innerText), 2000);
+    
+    // Gestion des filtres
+    const searchInput = document.getElementById('searchInternship');
+    const companyFilter = document.getElementById('companyFilter');
+    const skillsFilter = document.getElementById('skillsFilter');
+    
+    function applyFilters() {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('q', searchInput.value);
+        searchParams.set('company_id', companyFilter.value);
+        searchParams.set('skills', skillsFilter.value);
+        window.location.search = searchParams.toString();
+    }
+    
+    let debounceTimer;
+    const debounce = (callback, time) => {
+        window.clearTimeout(debounceTimer);
+        debounceTimer = window.setTimeout(callback, time);
     };
-}
+    
+    searchInput.addEventListener('input', () => debounce(applyFilters, 500));
+    companyFilter.addEventListener('change', applyFilters);
+    skillsFilter.addEventListener('input', () => debounce(applyFilters, 500));
+});
 
-// Confirmation de suppression
-function confirmDelete(internshipId, internshipTitle) {
-    if (confirm(`Êtes-vous sûr de vouloir supprimer l'offre "${internshipTitle}" ?`)) {
-        window.location.href = '/srx/internships/delete/' + internshipId;
+function confirmDelete(id, title) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer l'offre "${title}" ?`)) {
+        window.location.href = `/srx/internships/delete/${id}`;
     }
 }
 </script>
