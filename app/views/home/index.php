@@ -454,13 +454,13 @@ if (isset($data)) {
                 <div class="step-content">
                     <h3>Créez votre profil</h3>
                     <p>Inscrivez-vous gratuitement et complétez votre profil avec vos compétences et expériences.</p>
-                    <a href="/srx/register" class="step-link">
+                    <a href="/srx/internships" class="step-link">
                         <span>Commencer</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
-            
+
             <div class="step-card" data-step="2">
                 <div class="step-number">2</div>
                 <div class="step-icon">
@@ -475,7 +475,7 @@ if (isset($data)) {
                     </a>
                 </div>
             </div>
-            
+
             <div class="step-card" data-step="3">
                 <div class="step-number">3</div>
                 <div class="step-icon">
@@ -484,7 +484,7 @@ if (isset($data)) {
                 <div class="step-content">
                     <h3>Postulez en un clic</h3>
                     <p>Envoyez votre candidature et suivez son état d'avancement en temps réel.</p>
-                    <a href="/srx/register" class="step-link">
+                    <a href="/srx/internships" class="step-link">
                         <span>Postuler</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -541,6 +541,9 @@ if (isset($data)) {
     overflow: hidden;
     padding: 6rem 0;
     color: var(--text-white);
+    clip-path: polygon(0 0, 100% 0, 100% 97%, 0 100%);
+    margin-bottom: -2rem;
+    z-index: 1;
 }
 
 .hero-bg {
@@ -819,8 +822,10 @@ if (isset($data)) {
     padding: 6rem 0;
     background: linear-gradient(180deg, var(--bg-blue) 0%, var(--gray-100) 100%);
     position: relative;
-    margin-top: -6rem;
-    padding-top: 12rem;
+    z-index: 2;
+    clip-path: polygon(0 0, 100% 2%, 100% 98%, 0 100%);
+    margin-top: -2rem;
+    padding-top: 4rem;
 }
 
 .features .section-title {
@@ -972,10 +977,12 @@ if (isset($data)) {
 /* Testimonials Section */
 .testimonials {
     padding: 6rem 0;
-    background: #fafafa;
+    background: linear-gradient(180deg, var(--gray-100) 0%, white 100%);
     position: relative;
-    overflow: visible;
-    z-index: 1;
+    z-index: 4;
+    clip-path: polygon(0 2%, 100% 0, 100% 98%, 0 100%);
+    margin-top: -2rem;
+    padding-top: 4rem;
 }
 
 .testimonials .section-title {
@@ -1310,9 +1317,10 @@ if (isset($data)) {
     background: linear-gradient(135deg, var(--bg-blue) 0%, var(--primary-dark) 100%);
     color: var(--text-white);
     position: relative;
-    overflow: visible;
-    margin-top: 2rem;
-    z-index: 1;
+    z-index: 5;
+    clip-path: polygon(0 2%, 100% 0, 100% 98%, 0 100%);
+    margin-top: -2rem;
+    padding-top: 4rem;
 }
 
 .how-it-works .section-title {
@@ -1427,7 +1435,7 @@ if (isset($data)) {
 }
 
 .step-card:hover .step-icon {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.1);
     color: var(--bg-blue);
 }
 
@@ -1521,7 +1529,10 @@ if (isset($data)) {
     color: var(--gray-800);
     text-align: center;
     position: relative;
-    overflow: hidden;
+    z-index: 6;
+    clip-path: polygon(0 2%, 100% 0, 100% 100%, 0 100%);
+    margin-top: -2rem;
+    padding-top: 4rem;
 }
 
 .animated-background {
@@ -1863,14 +1874,17 @@ if (isset($data)) {
     color: var(--text-white);
     margin-bottom: 0.5rem;
     filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-    background: rgba(255, 255, 255, 0.2);
     width: 60px;
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.stat-icon i {
+    transform: rotate(90deg);
 }
 
 .stat-number {
@@ -1970,6 +1984,49 @@ if (isset($data)) {
     .stat-item p {
         font-size: 1rem;
     }
+}
+
+/* Ajout des styles de transition entre sections */
+section {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    z-index: -1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Animation des sections au scroll */
+.section-animate {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section-animate.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Effet de parallaxe sur le fond */
+.parallax-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: translateY(0);
+    transition: transform 0.3s ease-out;
 }
 </style>
 
@@ -2112,6 +2169,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 statElement.textContent = `${currentLikes + 1}`;
             } else {
                 statElement.textContent = `${currentLikes - 1}`;
+            }
+        });
+    });
+
+    // Animation des sections au scroll
+    const sections = document.querySelectorAll('section');
+    const parallaxBgs = document.querySelectorAll('.parallax-bg');
+    
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('section-animate', 'in-view');
+                
+                // Effet de parallaxe sur le fond
+                const bg = entry.target.querySelector('.parallax-bg');
+                if (bg) {
+                    const speed = 0.5;
+                    const yPos = (window.pageYOffset - entry.target.offsetTop) * speed;
+                    bg.style.transform = `translateY(${yPos}px)`;
+                }
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+    
+    sections.forEach(section => {
+        section.classList.add('section-animate');
+        sectionObserver.observe(section);
+    });
+    
+    // Effet de parallaxe au scroll
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        parallaxBgs.forEach(bg => {
+            const parent = bg.closest('section');
+            if (parent) {
+                const speed = 0.5;
+                const yPos = (scrolled - parent.offsetTop) * speed;
+                bg.style.transform = `translateY(${yPos}px)`;
             }
         });
     });

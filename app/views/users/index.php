@@ -201,11 +201,11 @@ if (isset($data)) {
 .user-card[data-role="2"] .user-avatar { background: var(--pilot-gradient); }
 .user-card[data-role="3"] .user-avatar { background: var(--student-gradient); }
 
-.user-avatar i {
-    font-size: 1.8rem;
-    color: var(--text-white);
+.user-avatar svg {
+    width: 24px;
+    height: 24px;
+    color: white;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    transition: all 0.3s ease;
 }
 
 .user-info {
@@ -228,21 +228,6 @@ if (isset($data)) {
     align-items: center;
     gap: 1rem;
 }
-
-.badge {
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-white);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.user-card[data-role="1"] .badge { background: var(--admin-gradient); }
-.user-card[data-role="2"] .badge { background: var(--pilot-gradient); }
-.user-card[data-role="3"] .badge { background: var(--student-gradient); }
 
 .user-email {
     color: var(--gray-600);
@@ -269,6 +254,21 @@ if (isset($data)) {
 .user-date i {
     color: var(--primary-blue);
 }
+
+.badge {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-white);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-card[data-role="1"] .badge { background: var(--admin-gradient); }
+.user-card[data-role="2"] .badge { background: var(--pilot-gradient); }
+.user-card[data-role="3"] .badge { background: var(--student-gradient); }
 
 .user-actions {
     display: flex;
@@ -457,7 +457,9 @@ if (isset($data)) {
             <?php foreach ($users as $user): ?>
                 <div class="user-card" data-role="<?= $user['role_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-email="<?= htmlspecialchars($user['email']) ?>">
                     <div class="user-avatar">
-                        <i class="fas fa-user"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                        </svg>
                     </div>
                     <div class="user-info">
                         <div class="user-main-info">

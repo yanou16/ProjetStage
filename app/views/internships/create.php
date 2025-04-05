@@ -117,92 +117,259 @@
     </div>
 </div>
 
+<div class="geometric-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+</div>
+
 <style>
 /* Variables */
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1e40af;
+    --primary: #4F46E5;
+    --primary-dark: #4338CA;
+    --primary-light: #818CF8;
     --background: #f8fafc;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border: #e2e8f0;
-    --danger: #dc3545;
-    --success: #28a745;
+    --text-primary: #1F2937;
+    --text-secondary: #4B5563;
+    --border: #E2E8F0;
+    --danger: #EF4444;
+    --success: #10B981;
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-input: 0 2px 4px rgba(79, 70, 229, 0.1);
+    --glow-primary: 0 0 20px rgba(79, 70, 229, 0.15);
 }
 
 /* Structure générale */
 .company-create-section {
     background: var(--background);
     min-height: 100vh;
-    padding-bottom: 2rem;
+    padding-bottom: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Effet de background animé */
+.company-create-section::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.1) 0%, transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.1) 0%, transparent 25%),
+        linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    transform: skewY(-3deg);
+    transform-origin: 0;
+    z-index: 0;
+    animation: gradientMove 15s ease-in-out infinite;
+}
+
+/* Particules d'arrière-plan */
+.company-create-section::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 50% 50%, white 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, white 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    opacity: 0.03;
+    z-index: 0;
+    animation: particlesFloat 20s linear infinite;
+}
+
+/* Formes géométriques flottantes */
+.geometric-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    opacity: 0.1;
+    animation: shapeFloat 20s infinite linear;
+}
+
+.shape-1 {
+    top: 20%;
+    left: 10%;
+    width: 100px;
+    height: 100px;
+    border: 2px solid var(--primary-light);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    animation-duration: 15s;
+}
+
+.shape-2 {
+    top: 60%;
+    right: 15%;
+    width: 150px;
+    height: 150px;
+    background: var(--primary-light);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation-duration: 25s;
+    animation-delay: -5s;
+}
+
+.shape-3 {
+    bottom: 20%;
+    left: 20%;
+    width: 80px;
+    height: 80px;
+    background: var(--primary);
+    border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+    animation-duration: 20s;
+    animation-delay: -10s;
+}
+
+/* Animations */
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes particlesFloat {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-40px);
+    }
+}
+
+@keyframes shapeFloat {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+        transform: translate(30px, -30px) rotate(120deg);
+    }
+    66% {
+        transform: translate(-30px, 30px) rotate(240deg);
+    }
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+    }
+}
+
+/* Effet de glassmorphisme amélioré */
+.info-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(79, 70, 229, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.info-card:hover {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 
+        0 12px 40px rgba(79, 70, 229, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 .content-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
-}
-
-@media (max-width: 992px) {
-    .content-grid {
-        grid-template-columns: 1fr;
-    }
+    margin-top: -60px;
 }
 
 /* En-tête */
 .header-section {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    padding: 1.5rem;
+    background: transparent;
+    padding: 2rem 0;
     margin-bottom: 2rem;
     color: white;
-    border-radius: 0 0 1rem 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
 .company-title {
-    font-size: 1.75rem;
+    font-size: 2.5rem;
     margin: 0;
-    font-weight: 600;
-    text-align: center;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeInDown 0.6s ease-out;
 }
 
 /* Cartes */
 .info-card {
     background: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
-    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.6s ease-out;
 }
 
 .info-card:hover {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
 }
 
 .card-body {
-    padding: 1.5rem;
+    padding: 2rem;
 }
 
 .section-title {
-    font-size: 1.25rem;
-    color: var(--primary-dark);
-    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 2rem;
     font-weight: 600;
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 0.5rem;
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 3px;
 }
 
 /* Formulaire */
 .form-section {
     margin-bottom: 2.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
+    animation: fadeIn 0.6s ease-out;
 }
 
 .form-group {
@@ -212,58 +379,96 @@
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 500;
     color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .form-control {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid var(--border);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     font-size: 1rem;
     transition: all 0.3s ease;
+    background: white;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-input);
 }
 
 .form-control:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.1);
+    border-color: var(--primary-light);
+    box-shadow: var(--glow-primary);
     outline: none;
 }
 
-.form-control.is-invalid {
-    border-color: var(--danger);
-}
-
-.invalid-feedback {
-    color: var(--danger);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: none;
-}
-
-.was-validated .form-control:invalid ~ .invalid-feedback {
-    display: block;
+.form-control:hover {
+    border-color: var(--primary-light);
 }
 
 textarea.form-control {
-    min-height: 120px;
     resize: vertical;
+    min-height: 120px;
 }
 
 .form-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
 }
 
-@media (max-width: 768px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
+/* Boutons */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
 }
 
-/* Liste d'informations */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-submit {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-cancel {
+    background: white;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+.btn-cancel:hover {
+    background: var(--background);
+    color: var(--text-primary);
+}
+
+/* Sidebar */
+.sidebar .info-card {
+    position: sticky;
+    top: 2rem;
+}
+
 .info-list {
     list-style: none;
     padding: 0;
@@ -274,92 +479,214 @@ textarea.form-control {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
+    padding: 0.75rem 0;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
 }
 
-.info-list i {
+.info-list li:last-child {
+    border-bottom: none;
+}
+
+.info-list li i {
     color: var(--primary);
-    font-size: 1rem;
-    width: 1.25rem;
-    text-align: center;
+    font-size: 1.25rem;
 }
 
-/* Actions du formulaire */
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-    gap: 1rem;
+/* Validation et alertes */
+.invalid-feedback {
+    display: none;
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
 }
 
-.btn-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
+.form-control.is-invalid {
+    border-color: var(--danger);
 }
 
-.btn-cancel {
-    background: var(--text-secondary);
-    color: white;
+.form-control.is-invalid + .invalid-feedback {
+    display: block;
 }
 
-.btn-submit {
-    background: var(--primary);
-    color: white;
-}
-
-.btn-action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-cancel:hover {
-    background: #525252;
-}
-
-.btn-submit:hover {
-    background: var(--primary-dark);
-}
-
-/* Alertes */
 .alert {
     padding: 1rem;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     margin-bottom: 1.5rem;
+    animation: shake 0.5s ease-in-out;
 }
 
 .alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .company-title {
+        font-size: 2rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .company-title {
+        font-size: 1.75rem;
+    }
+
+    .btn-action {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+}
+
+/* Effets de hover sur les select */
+select.form-control {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234B5563'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.5em;
+    padding-right: 2.5rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Personnalisation des placeholder */
+::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Effet de focus visible */
+.form-control:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 1px;
+}
+
+/* Effet de transition sur les inputs */
+.form-control {
+    transition: all 0.2s ease;
+}
+
+/* Style des scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
 }
 </style>
 
 <script>
-// Validation du formulaire côté client
-(function () {
-    'use strict'
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation des sections au scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
 
-    var forms = document.querySelectorAll('.needs-validation')
+    document.querySelectorAll('.form-section').forEach(section => {
+        observer.observe(section);
+    });
 
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
+    // Validation personnalisée du formulaire
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
 
-                form.classList.add('was-validated')
-            }, false)
-        })
-})()
+    // Animation des inputs au focus
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.form-group').classList.add('focused');
+        });
+
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.closest('.form-group').classList.remove('focused');
+            }
+        });
+    });
+});
 </script>
