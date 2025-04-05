@@ -28,10 +28,6 @@ if (isset($data)) {
                         <i class="fas fa-search"></i>
                         Voir les offres
                     </a>
-                    <a href="/srx/register" class="btn btn-outline">
-                        <i class="fas fa-user-plus"></i>
-                        S'inscrire gratuitement
-                    </a>
                 </div>
 
                 <div class="stats-row animate-fade">
@@ -510,10 +506,6 @@ if (isset($data)) {
         <h2 class="glow-text">Prêt à lancer votre carrière ?</h2>
         <p>Rejoignez des milliers d'étudiants qui ont trouvé leur stage idéal avec Stageflow</p>
         <div class="cta-buttons">
-            <a href="/srx/register" class="btn btn-primary shine-effect">
-                <span>S'inscrire gratuitement</span>
-                <i class="fas fa-arrow-right"></i>
-            </a>
             <a href="/srx/internships" class="btn btn-outline pulse-effect">
                 <span>Parcourir les offres</span>
                 <i class="fas fa-search"></i>
