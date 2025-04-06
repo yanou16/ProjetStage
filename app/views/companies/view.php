@@ -5,7 +5,7 @@
             <div class="header-content">
                 <h1 class="company-title"><?= htmlspecialchars($company['name']) ?></h1>
                 <div class="header-actions">
-                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                    <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['admin', 'pilote'])): ?>
                         <a href="/srx/companies/edit/<?= $company['id'] ?>" class="btn-action btn-edit">
                             <i class="bi bi-pencil"></i> Modifier
                         </a>
@@ -21,6 +21,28 @@
         <div class="content-grid">
             <!-- Colonne gauche -->
             <div class="main-content">
+                <!-- Statistiques -->
+                <div class="info-card">
+                    <div class="card-body">
+                        <h2 class="section-title">Statistiques</h2>
+                        <ul class="stats-list">
+                            <li>
+                                <i class="fas fa-star text-yellow"></i>
+                                <span><?= number_format($company['rating'] ?? 0, 1) ?>/5 
+                                    (<?= $company['rating_count'] ?? 0 ?> avis)</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-briefcase"></i>
+                                <span><?= count($internships) ?> stage(s)</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-calendar"></i>
+                                <span>Membre depuis <?= (new DateTime($company['created_at']))->format('d/m/Y') ?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- Carte Informations générales -->
                 <div class="info-card">
                     <div class="card-body">
@@ -126,28 +148,6 @@
                                 <p>Adresse non disponible</p>
                             </div>
                         <?php endif; ?>
-                    </div>
-                </div>
-
-                <!-- Statistiques -->
-                <div class="info-card">
-                    <div class="card-body">
-                        <h2 class="section-title">Statistiques</h2>
-                        <ul class="stats-list">
-                            <li>
-                                <i class="fas fa-star text-yellow"></i>
-                                <span><?= number_format($company['rating'] ?? 0, 1) ?>/5 
-                                    (<?= $company['rating_count'] ?? 0 ?> avis)</span>
-                            </li>
-                            <li>
-                                <i class="bi bi-briefcase"></i>
-                                <span><?= count($internships) ?> stage(s)</span>
-                            </li>
-                            <li>
-                                <i class="bi bi-calendar"></i>
-                                <span>Membre depuis <?= (new DateTime($company['created_at']))->format('d/m/Y') ?></span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
@@ -514,4 +514,301 @@
     font-size: 0.9rem;
     color: var(--text-secondary);
 }
-</style>
+
+.stats-section {
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f8faff 0%, #f0f5ff 100%);
+    border-radius: 20px;
+    margin: 2rem 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #3B82F6, #60A5FA);
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    background: linear-gradient(135deg, #3B82F6, #60A5FA);
+}
+
+.stat-title {
+    font-size: 1.1rem;
+    color: #4B5563;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1F2937;
+    margin-bottom: 1rem;
+}
+
+/* Barre de progression circulaire */
+.progress-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 1rem auto;
+}
+
+.progress-circle-bg {
+    fill: none;
+    stroke: #E5E7EB;
+    stroke-width: 8;
+}
+
+.progress-circle-value {
+    fill: none;
+    stroke: #3B82F6;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dasharray 1s ease;
+}
+
+.progress-circle text {
+    font-size: 24px;
+    font-weight: bold;
+    fill: #1F2937;
+}
+
+/* Graphique en barres */
+.bar-chart {
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.bar {
+    flex: 1;
+    background: linear-gradient(180deg, #3B82F6, #60A5FA);
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    transition: height 1s ease;
+    min-width: 30px;
+}
+
+.bar::before {
+    content: attr(data-value);
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4B5563;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.875rem;
+    color: #6B7280;
+    white-space: nowrap;
+}
+
+/* Graphique en ligne */
+.line-chart {
+    height: 200px;
+    position: relative;
+    padding: 1rem 0;
+    margin-top: 2rem;
+}
+
+.line-path {
+    fill: none;
+    stroke: #3B82F6;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.point {
+    fill: white;
+    stroke: #3B82F6;
+    stroke-width: 3;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.point:hover {
+    transform: scale(1.5);
+}
+
+/* Carte de tendance */
+.trend-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #F3F4F6;
+    border-radius: 12px;
+    margin-top: 1rem;
+}
+
+.trend-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.trend-up {
+    background: #DEF7EC;
+    color: #059669;
+}
+
+.trend-down {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.trend-info {
+    flex: 1;
+}
+
+.trend-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.trend-label {
+    font-size: 0.875rem;
+    color: #6B7280;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style><div class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <!-- Statistiques des stages -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 class="stat-title">Stages proposés</h3>
+                </div>
+                <div class="stat-value"><?= $stats['total_internships'] ?? 0 ?></div>
+                <svg class="progress-circle" viewBox="0 0 100 100">
+                    <circle class="progress-circle-bg" cx="50" cy="50" r="45"/>
+                    <circle class="progress-circle-value" cx="50" cy="50" r="45" 
+                            stroke-dasharray="<?= ($stats['active_internships'] ?? 0) / ($stats['total_internships'] ?? 1) * 283 ?> 283"/>
+                    <text x="50" y="50" text-anchor="middle" dy=".3em"><?= $stats['active_internships'] ?? 0 ?></text>
+                </svg>
+                <div class="trend-card">
+                    <div class="trend-icon <?= ($stats['internship_trend'] ?? 0) > 0 ? 'trend-up' : 'trend-down' ?>">
+                        <i class="fas fa-<?= ($stats['internship_trend'] ?? 0) > 0 ? 'arrow-up' : 'arrow-down' ?>"></i>
+                    </div>
+                    <div class="trend-info">
+                        <div class="trend-value"><?= abs($stats['internship_trend'] ?? 0) ?>%</div>
+                        <div class="trend-label">vs mois précédent</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiques des candidatures -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="stat-title">Candidatures reçues</h3>
+                </div>
+                <div class="stat-value"><?= $stats['total_applications'] ?? 0 ?></div>
+                <div class="bar-chart">
+                    <?php
+                    $months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun'];
+                    $values = $stats['monthly_applications'] ?? [30, 45, 60, 35, 50, 70];
+                    $max = max($values);
+                    foreach ($values as $i => $value):
+                        $height = ($value / $max) * 100;
+                    ?>
+                    <div class="bar" style="height: <?= $height ?>%" data-value="<?= $value ?>">
+                        <span class="bar-label"><?= $months[$i] ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Statistiques des évaluations -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="stat-title">Satisfaction globale</h3>
+                </div>
+                <div class="stat-value"><?= number_format($stats['average_rating'] ?? 0, 1) ?>/5</div>
+                <div class="bar-chart">
+                    <?php
+                    for ($i = 5; $i >= 1; $i--):
+                        $count = $stats['rating_distribution'][$i] ?? 0;
+                        $total = array_sum($stats['rating_distribution'] ?? []);
+                        $percentage = $total > 0 ? ($count / $total) * 100 : 0;
+                    ?>
+                    <div class="bar" style="height: <?= $percentage ?>%" data-value="<?= $count ?>">
+                        <span class="bar-label"><?= $i ?>★</span>
+                    </div>
+                    <?php endfor; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -89,9 +89,41 @@ class User extends Model {
     }
 
     public function delete($id) {
-        $sql = "DELETE FROM users WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$id]);
+        try {
+            $this->db->beginTransaction();
+
+            // 1. Supprimer les évaluations d'entreprises de l'utilisateur
+            $sql = "DELETE FROM company_ratings WHERE user_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$id]);
+
+            // 2. Supprimer les candidatures de l'utilisateur
+            $sql = "DELETE FROM applications WHERE user_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$id]);
+
+            // 3. Supprimer les wishlists de l'utilisateur
+            $sql = "DELETE FROM wishlists WHERE user_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$id]);
+
+            // 4. Supprimer les candidatures aux stages
+            $sql = "DELETE FROM internship_applications WHERE student_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$id]);
+
+            // 5. Enfin, supprimer l'utilisateur
+            $sql = "DELETE FROM users WHERE id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$id]);
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            error_log("Erreur lors de la suppression de l'utilisateur: " . $e->getMessage());
+            return false;
+        }
     }
 
     // Méthodes pour gérer les transactions

@@ -1,3 +1,10 @@
+<?php
+// Initialisation des variables
+$q = $_GET['q'] ?? '';
+$company_id = $_GET['company_id'] ?? '';
+$skills_id = $_GET['skills'] ?? '';
+?>
+
 <div class="hero-section">
     <div id="particles-js"></div>
     <div class="container hero-content">
@@ -38,39 +45,43 @@
 
 <div class="page-container">
     <div class="container">
-        <!-- Filtres avec animation -->
-        <div class="filters-section" data-aos="fade-down">
-            <div class="search-box-wrapper">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInternship" 
-                           placeholder="Rechercher par titre, entreprise ou compétences..."
-                           value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+        <!-- Section de recherche -->
+        <div class="search-section">
+            <div class="main-search">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" 
+                           id="searchInput" 
+                           name="q" 
+                           placeholder="Rechercher par titre, entreprise ou compétences..." 
+                           value="<?= htmlspecialchars($q ?? '') ?>"
+                           class="search-input">
                 </div>
             </div>
             
-            <div class="filters-advanced">
+            <div class="filters-container">
                 <div class="filter-group">
-                    <div class="icon-input">
-                        <i class="fas fa-building"></i>
-                        <select id="companyFilter" class="form-control">
-                            <option value="">Toutes les entreprises</option>
-                            <?php foreach ($companies as $company): ?>
-                                <option value="<?= $company['id'] ?>" 
-                                        <?= isset($_GET['company_id']) && $_GET['company_id'] == $company['id'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($company['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                    <i class="fas fa-building"></i>
+                    <select id="companyFilter" name="company_id" class="filter-select">
+                        <option value="">Toutes les entreprises</option>
+                        <?php foreach ($companies as $company): ?>
+                            <option value="<?= $company['id'] ?>" <?= ($company_id == $company['id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($company['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
+
                 <div class="filter-group">
-                    <div class="icon-input">
-                        <i class="fas fa-tools"></i>
-                        <input type="text" id="skillsFilter" class="form-control" 
-                               placeholder="Filtrer par compétences..." 
-                               value="<?= htmlspecialchars($_GET['skills'] ?? '') ?>">
-                    </div>
+                    <i class="fas fa-code"></i>
+                    <select id="skillsFilter" name="skills" class="filter-select">
+                        <option value="">Compétences requises</option>
+                        <?php foreach ($skills as $skill): ?>
+                            <option value="<?= $skill['id'] ?>" <?= ($skills_id == $skill['id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($skill['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
         </div>
@@ -581,6 +592,112 @@
         padding: 1rem;
     }
 }
+
+/* Section de recherche */
+.search-section {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Barre de recherche principale */
+.main-search {
+    margin-bottom: 20px;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6B7280;
+    font-size: 18px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #F9FAFB;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #2563EB;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Conteneur des filtres */
+.filters-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.filter-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6B7280;
+    z-index: 1;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #374151;
+    background: #F9FAFB;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #2563EB;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-section {
+        padding: 15px;
+    }
+
+    .filters-container {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+}
 </style>
 
 <!-- Scripts -->
@@ -687,27 +804,37 @@ document.addEventListener('DOMContentLoaded', function() {
     animateValue(companyCount, 0, parseInt(companyCount.innerText), 2000);
     
     // Gestion des filtres
-    const searchInput = document.getElementById('searchInternship');
+    const searchInput = document.getElementById('searchInput');
     const companyFilter = document.getElementById('companyFilter');
     const skillsFilter = document.getElementById('skillsFilter');
     
-    function applyFilters() {
-        const searchParams = new URLSearchParams(window.location.search);
-        searchParams.set('q', searchInput.value);
-        searchParams.set('company_id', companyFilter.value);
-        searchParams.set('skills', skillsFilter.value);
-        window.location.search = searchParams.toString();
+    function updateSearch() {
+        const searchParams = new URLSearchParams();
+        
+        if (searchInput.value) searchParams.set('q', searchInput.value);
+        if (companyFilter.value) searchParams.set('company_id', companyFilter.value);
+        if (skillsFilter.value) searchParams.set('skills', skillsFilter.value);
+        
+        window.location.href = `${window.location.pathname}?${searchParams.toString()}`;
     }
     
-    let debounceTimer;
-    const debounce = (callback, time) => {
-        window.clearTimeout(debounceTimer);
-        debounceTimer = window.setTimeout(callback, time);
-    };
-    
-    searchInput.addEventListener('input', () => debounce(applyFilters, 500));
-    companyFilter.addEventListener('change', applyFilters);
-    skillsFilter.addEventListener('input', () => debounce(applyFilters, 500));
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', debounce(() => updateSearch(), 500));
+    companyFilter.addEventListener('change', updateSearch);
+    skillsFilter.addEventListener('change', updateSearch);
 });
 
 function confirmDelete(id, title) {

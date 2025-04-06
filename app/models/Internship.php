@@ -95,9 +95,26 @@ class Internship extends Model {
     }
 
     public function delete($id) {
-        $sql = "DELETE FROM internships WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$id]);
+        try {
+            $this->db->beginTransaction();
+
+            // Supprimer d'abord les candidatures associées
+            $sql = "DELETE FROM internship_applications WHERE internship_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$id]);
+
+            // Supprimer le stage
+            $sql = "DELETE FROM internships WHERE id = ?";
+            $stmt = $this->db->prepare($sql);
+            $result = $stmt->execute([$id]);
+
+            $this->db->commit();
+            return $result;
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            error_log("Erreur lors de la suppression du stage: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function find($id) {
@@ -361,8 +378,13 @@ class Internship extends Model {
     }
 
     public function getStudentWishlist($studentId) {
-        $sql = "SELECT w.*, i.title as internship_title, i.description,
-                       c.name as company_name, c.id as company_id
+        $sql = "SELECT 
+                    i.*,
+                    c.name as company_name,
+                    c.id as company_id,
+                    w.created_at as added_date,
+                    i.id as internship_id,
+                    i.title as internship_title
                 FROM wishlist w
                 JOIN internships i ON w.internship_id = i.id
                 JOIN companies c ON i.company_id = c.id

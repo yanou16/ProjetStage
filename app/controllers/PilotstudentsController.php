@@ -5,9 +5,10 @@ class PilotstudentsController extends Controller {
     private $promotionModel;
 
     public function __construct() {
-        // Vérifier si l'utilisateur est pilote
+        parent::__construct();
+        // Vérifier si l'utilisateur est connecté et est un pilote
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'pilote') {
-            header('Location: /srx/auth/login');
+            header('Location: /srx/users/login');
             exit;
         }
         $this->studentModel = new Student();
@@ -15,12 +16,33 @@ class PilotstudentsController extends Controller {
     }
 
     public function index() {
-        $data = [
-            'title' => 'Gestion des étudiants',
-            'students' => $this->studentModel->getAllByPilot($_SESSION['user']['id']),
-            'promotions' => $this->promotionModel->getAll()
-        ];
-        $this->renderView('pilotstudents/index', $data);
+        try {
+            // Récupérer tous les utilisateurs qui sont des étudiants (role_id = 3)
+            $query = "SELECT u.*, r.name as role 
+                     FROM users u 
+                     INNER JOIN roles r ON u.role_id = r.id 
+                     WHERE r.name = 'student' 
+                     ORDER BY u.created_at DESC";
+            
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Charger la vue avec les données
+            $this->renderView('users/index', [
+                'users' => $users,
+                'title' => 'Mes Étudiants'
+            ]);
+        } catch (PDOException $e) {
+            $_SESSION['flash_message'] = [
+                'type' => 'danger',
+                'message' => 'Une erreur est survenue lors de la récupération des étudiants.'
+            ];
+            $this->renderView('users/index', [
+                'users' => [],
+                'title' => 'Mes Étudiants'
+            ]);
+        }
     }
 
     public function create() {

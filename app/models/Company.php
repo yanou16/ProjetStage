@@ -67,9 +67,138 @@ class Company extends Model {
     }
 
     public function delete($id) {
-        $sql = "DELETE FROM companies WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$id]);
+        try {
+            $this->db->beginTransaction();
+
+            // Vérifier si l'entreprise existe avant de la supprimer
+            $company = $this->find($id);
+            if (!$company) {
+                throw new Exception("L'entreprise avec l'ID $id n'existe pas.");
+            }
+
+            try {
+                // 1. Supprimer les candidatures aux stages
+                $sql = "DELETE FROM internship_applications 
+                        WHERE internship_id IN (
+                            SELECT id FROM internships 
+                            WHERE company_id = ?
+                        )";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$id]);
+                error_log("1. Candidatures supprimées pour l'entreprise $id");
+
+                // 2. Supprimer les compétences des stages
+                $sql = "DELETE FROM internship_skills 
+                        WHERE internship_id IN (
+                            SELECT id FROM internships 
+                            WHERE company_id = ?
+                        )";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$id]);
+                error_log("2. Compétences des stages supprimées pour l'entreprise $id");
+
+                // 3. Supprimer les stages
+                $sql = "DELETE FROM internships WHERE company_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$id]);
+                error_log("3. Stages supprimés pour l'entreprise $id");
+
+                // 4. Supprimer les évaluations
+                $sql = "DELETE FROM company_ratings WHERE company_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$id]);
+                error_log("4. Évaluations supprimées pour l'entreprise $id");
+
+                // 5. Finalement, supprimer l'entreprise
+                $sql = "DELETE FROM companies WHERE id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$id]);
+                error_log("5. Entreprise $id supprimée avec succès");
+
+                $this->db->commit();
+                return true;
+
+            } catch (PDOException $e) {
+                $this->db->rollBack();
+                
+                // Log détaillé de l'erreur
+                error_log("=== ERREUR DE SUPPRESSION DÉTAILLÉE ===");
+                error_log("Entreprise ID: " . $id);
+                error_log("Code erreur SQL: " . $e->getCode());
+                error_log("Message erreur SQL: " . $e->getMessage());
+                error_log("Table en erreur: " . $this->getTableFromError($e->getMessage()));
+                error_log("Trace: " . $e->getTraceAsString());
+                
+                // Vérifier les données liées
+                $this->checkLinkedData($id);
+                
+                throw new Exception(
+                    "Erreur détaillée lors de la suppression :\n" .
+                    "Code: " . $e->getCode() . "\n" .
+                    "Message: " . $e->getMessage() . "\n" .
+                    "Table: " . $this->getTableFromError($e->getMessage())
+                );
+            }
+
+        } catch (Exception $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            throw $e;
+        }
+    }
+
+    private function getTableFromError($errorMessage) {
+        // Extraire le nom de la table à partir du message d'erreur
+        if (preg_match('/`([^`]+)`/', $errorMessage, $matches)) {
+            return $matches[1];
+        }
+        return "Table inconnue";
+    }
+
+    private function checkLinkedData($companyId) {
+        $tables = [
+            'internship_applications' => "SELECT COUNT(*) FROM internship_applications WHERE internship_id IN (SELECT id FROM internships WHERE company_id = ?)",
+            'internship_skills' => "SELECT COUNT(*) FROM internship_skills WHERE internship_id IN (SELECT id FROM internships WHERE company_id = ?)",
+            'internships' => "SELECT COUNT(*) FROM internships WHERE company_id = ?",
+            'company_ratings' => "SELECT COUNT(*) FROM company_ratings WHERE company_id = ?"
+        ];
+
+        error_log("=== VÉRIFICATION DES DONNÉES LIÉES ===");
+        foreach ($tables as $table => $query) {
+            try {
+                $stmt = $this->db->prepare($query);
+                $stmt->execute([$companyId]);
+                $count = $stmt->fetchColumn();
+                error_log("$table : $count enregistrements trouvés");
+            } catch (Exception $e) {
+                error_log("Erreur lors de la vérification de $table : " . $e->getMessage());
+            }
+        }
+    }
+
+    private function logTableCounts($companyId) {
+        $tables = [
+            'companies' => "SELECT COUNT(*) FROM companies WHERE id = ?",
+            'internships' => "SELECT COUNT(*) FROM internships WHERE company_id = ?",
+            'company_ratings' => "SELECT COUNT(*) FROM company_ratings WHERE company_id = ?",
+            'internship_applications' => "SELECT COUNT(*) FROM internship_applications WHERE internship_id IN (SELECT id FROM internships WHERE company_id = ?)",
+            'applications' => "SELECT COUNT(*) FROM applications WHERE internship_id IN (SELECT id FROM internships WHERE company_id = ?)",
+            'internship_skills' => "SELECT COUNT(*) FROM internship_skills WHERE internship_id IN (SELECT id FROM internships WHERE company_id = ?)",
+            'wishlists' => "SELECT COUNT(*) FROM wishlists WHERE internship_id IN (SELECT id FROM internships WHERE company_id = ?)"
+        ];
+
+        error_log("=== ÉTAT DES TABLES POUR L'ENTREPRISE ID $companyId ===");
+        foreach ($tables as $table => $query) {
+            try {
+                $stmt = $this->db->prepare($query);
+                $stmt->execute([$companyId]);
+                $count = $stmt->fetchColumn();
+                error_log("$table : $count enregistrements");
+            } catch (Exception $e) {
+                error_log("Erreur lors de la vérification de $table : " . $e->getMessage());
+            }
+        }
     }
 
     public function find($id) {

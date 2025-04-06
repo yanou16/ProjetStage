@@ -24,36 +24,49 @@
                             <div class="wishlist-header">
                                 <div class="company-info">
                                     <div class="company-logo">
-                                        <i class="fas fa-building"></i>
+                                        <?= strtoupper(substr($item['company_name'], 0, 2)) ?>
                                     </div>
                                     <div class="company-details">
                                         <h3><?= htmlspecialchars($item['internship_title']) ?></h3>
-                                        <p>
-                                            <a href="/srx/companies/view/<?= $item['company_id'] ?>">
-                                                <?= htmlspecialchars($item['company_name']) ?>
-                                            </a>
+                                        <p class="company-name">
+                                            <i class="fas fa-building"></i>
+                                            <?= htmlspecialchars($item['company_name']) ?>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="wishlist-body">
-                                <div class="wishlist-details">
+                                <div class="internship-details">
                                     <div class="detail-item">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Ajouté le <?= date('d/m/Y', strtotime($item['created_at'])) ?></span>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span><?= isset($item['location']) ? htmlspecialchars($item['location']) : 'Non spécifié' ?></span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-euro-sign"></i>
+                                        <span><?= isset($item['compensation']) ? number_format($item['compensation'], 2) : '0.00' ?>€ / mois</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span><?= isset($item['duration']) ? htmlspecialchars($item['duration']) : '0' ?> semaines</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Ajouté le <?= isset($item['added_date']) ? date('d/m/Y', strtotime($item['added_date'])) : date('d/m/Y') ?></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="wishlist-footer">
                                 <div class="wishlist-actions">
                                     <a href="/srx/internships/view/<?= $item['internship_id'] ?>" 
-                                       class="btn-icon btn-view" title="Voir le stage">
+                                       class="btn-action btn-view">
                                         <i class="fas fa-eye"></i>
+                                        Voir le stage
                                     </a>
                                     <form action="/srx/internships/toggleWishlist/<?= $item['internship_id'] ?>" 
                                           method="POST" class="d-inline">
-                                        <button type="submit" class="btn-icon btn-remove" title="Retirer des favoris">
+                                        <button type="submit" class="btn-action btn-remove">
                                             <i class="fas fa-heart-broken"></i>
+                                            Retirer des favoris
                                         </button>
                                     </form>
                                 </div>
@@ -358,11 +371,17 @@
     background: var(--bg-white);
 }
 
+.internship-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
 .detail-item {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 0.5rem;
+    padding: 0.75rem;
     background: rgba(243, 244, 246, 0.5);
     border-radius: 12px;
     transition: all 0.3s ease;
@@ -391,13 +410,16 @@
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.btn-icon {
-    width: 48px;
-    height: 48px;
+.btn-action {
+    width: auto;
+    min-width: 140px;
+    height: 42px;
     border-radius: 12px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--text-primary);
@@ -406,9 +428,11 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    text-decoration: none;
+    font-weight: 500;
 }
 
-.btn-icon::before {
+.btn-action::before {
     content: '';
     position: absolute;
     width: 100%;
@@ -418,20 +442,30 @@
     transition: transform 0.4s ease;
 }
 
-.btn-icon:hover {
+.btn-action:hover {
     transform: translateY(-3px) scale(1.1);
     box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.3);
 }
 
-.btn-icon:hover::before {
+.btn-action:hover::before {
     transform: scale(2);
     animation: pulseEffect 1s infinite;
 }
 
-.btn-view:hover {
+.btn-view {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    gap: 8px;
+    padding: 0 1rem;
+    white-space: nowrap;
+    font-size: 0.95rem;
+}
+
+.btn-view i {
+    margin-right: 6px;
 }
 
 .btn-remove {

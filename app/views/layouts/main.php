@@ -719,6 +719,10 @@
                                 <a href="/srx/internships/myWishlist" style="--i:3"><i class="fas fa-star"></i> Favoris</a>
                             <?php endif; ?>
                             
+                            <?php if ($_SESSION['user']['role'] === 'pilote'): ?>
+                                <a href="/srx/pilotstudents" style="--i:1"><i class="fas fa-user-graduate"></i> Mes Étudiants</a>
+                            <?php endif; ?>
+
                             <?php if ($_SESSION['user']['role'] === 'student'): ?>
                                 <a href="/srx/internships/myApplications" style="--i:1"><i class="fas fa-file-alt"></i> Candidatures</a>
                                 <a href="/srx/internships/myWishlist" style="--i:2"><i class="fas fa-star"></i> Favoris</a>

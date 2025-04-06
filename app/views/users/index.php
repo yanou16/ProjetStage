@@ -316,6 +316,10 @@ if (isset($data)) {
     background: linear-gradient(135deg, var(--danger-red), #DC2626);
 }
 
+.btn-stats {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+}
+
 .empty-state {
     text-align: center;
     padding: 6rem 2rem;
@@ -433,12 +437,14 @@ if (isset($data)) {
         <div class="header-actions">
             <div class="search-input-wrapper">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchUsers" placeholder="Rechercher par nom, email ou rôle...">
+                <input type="text" id="searchUsers" placeholder="Rechercher par nom, email...">
             </div>
+            <?php if ($_SESSION['user']['role'] === 'admin'): ?>
             <a href="/srx/users/create" class="btn btn-primary">
                 <i class="fas fa-plus"></i>
                 Nouveau compte
             </a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -455,6 +461,12 @@ if (isset($data)) {
     <div class="users-grid">
         <?php if (!empty($users)): ?>
             <?php foreach ($users as $user): ?>
+                <?php 
+                // N'afficher que les étudiants pour les pilotes
+                if ($_SESSION['user']['role'] === 'pilote' && $user['role_id'] !== 3) {
+                    continue;
+                }
+                ?>
                 <div class="user-card" data-role="<?= $user['role_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-email="<?= htmlspecialchars($user['email']) ?>">
                     <div class="user-avatar">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -492,13 +504,20 @@ if (isset($data)) {
                         </div>
                     </div>
                     <div class="user-actions">
-                        <a href="/srx/users/edit/<?= $user['id'] ?>" class="btn-icon btn-edit" title="Modifier">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button type="button" class="btn-icon btn-delete" title="Supprimer" 
-                                onclick="confirmDelete(<?= $user['id'] ?>, '<?= htmlspecialchars($user['username']) ?>')">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <?php if ($user['role_id'] === 3): ?>
+                            <a href="/srx/internships/studentStats/<?= $user['id'] ?>" class="btn-icon btn-stats" title="Statistiques">
+                                <i class="fas fa-chart-bar"></i>
+                            </a>
+                        <?php endif; ?>
+                        <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                            <a href="/srx/users/edit/<?= $user['id'] ?>" class="btn-icon btn-edit" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button type="button" class="btn-icon btn-delete" title="Supprimer" 
+                                    onclick="confirmDelete(<?= $user['id'] ?>, '<?= htmlspecialchars($user['username']) ?>')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -506,10 +525,7 @@ if (isset($data)) {
             <div class="empty-state">
                 <i class="fas fa-users"></i>
                 <h3>Aucun utilisateur trouvé</h3>
-                <p>Commencez par créer un nouveau compte utilisateur</p>
-                <a href="/srx/users/create" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Créer un compte
-                </a>
+                <p>Aucun étudiant n'est enregistré dans le système</p>
             </div>
         <?php endif; ?>
     </div>

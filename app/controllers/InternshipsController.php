@@ -183,9 +183,9 @@ class InternshipsController extends Controller {
         }
 
         // Vérifier le message de motivation
-        $message = trim($_POST['message'] ?? '');
-        if (empty($message)) {
-            $this->setFlashMessage('danger', 'Le message de motivation est requis');
+        $motivation = trim($_POST['motivation'] ?? '');
+        if (empty($motivation)) {
+            $this->setFlashMessage('danger', 'La lettre de motivation est requise');
             $this->redirect("/srx/internships/view/{$id}");
             return;
         }
@@ -233,12 +233,14 @@ class InternshipsController extends Controller {
         }
 
         // Envoyer la candidature
-        $result = $this->internshipModel->applyForInternship($id, $_SESSION['user']['id'], $message, $cvPath);
+        $result = $this->internshipModel->applyForInternship($id, $_SESSION['user']['id'], $motivation, $cvPath);
 
         if ($result === true) {
             $this->setFlashMessage('success', 'Votre candidature a été envoyée avec succès');
+            $this->redirect('/srx/internships/myApplications');
         } elseif ($result === 'already_applied') {
             $this->setFlashMessage('warning', 'Vous avez déjà postulé à ce stage');
+            $this->redirect("/srx/internships/view/{$id}");
         } else {
             $this->setFlashMessage('danger', 'Une erreur est survenue lors de l\'envoi de votre candidature');
             // Supprimer le CV si la candidature a échoué
@@ -312,17 +314,47 @@ class InternshipsController extends Controller {
         $this->renderView('internships/my_wishlist', $data);
     }
 
-    public function studentStats() {
+    public function studentStats($studentId = null) {
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'pilote'])) {
             $this->setFlashMessage('danger', 'Accès non autorisé');
             $this->redirect('/srx/internships');
             return;
         }
 
-        $stats = $this->internshipModel->getStudentStats();
+        if (!$studentId) {
+            $this->setFlashMessage('danger', 'ID étudiant non spécifié');
+            $this->redirect('/srx/users');
+            return;
+        }
+
+        // Récupérer les informations de l'étudiant
+        $userModel = new User();
+        $student = $userModel->findById($studentId);
         
+        if (!$student || $student['role_id'] !== 3) {
+            $this->setFlashMessage('danger', 'Étudiant non trouvé');
+            $this->redirect('/srx/users');
+            return;
+        }
+
+        // Récupérer les statistiques de l'étudiant
+        $stats = [
+            'applications' => $this->internshipModel->getStudentApplications($studentId),
+            'wishlist' => $this->internshipModel->getStudentWishlist($studentId),
+            'total_applications' => count($this->internshipModel->getStudentApplications($studentId)),
+            'total_wishlist' => count($this->internshipModel->getStudentWishlist($studentId))
+        ];
+
+        // Calculer les statistiques supplémentaires
+        $applicationStatuses = ['pending' => 0, 'accepted' => 0, 'rejected' => 0];
+        foreach ($stats['applications'] as $application) {
+            $applicationStatuses[$application['status']]++;
+        }
+        $stats['status_distribution'] = $applicationStatuses;
+
         $data = [
-            'title' => 'Statistiques des étudiants',
+            'title' => 'Statistiques de ' . $student['username'],
+            'student' => $student,
             'stats' => $stats
         ];
 
